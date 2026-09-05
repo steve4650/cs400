@@ -112,6 +112,11 @@ public class BinarySearchTree<T extends Comparable<T>> implements SortedCollecti
       System.out.println("failed test2");
       return;
     }
+    result = test3();
+    if (!result) {
+      System.out.println("failed test3");
+      return;
+    }
     System.out.println("passed everything");
   }
 
@@ -180,6 +185,54 @@ public class BinarySearchTree<T extends Comparable<T>> implements SortedCollecti
     if (intTree.contains(-3) || intTree.contains(3) || intTree.contains(-2)) {
       return false;
     }
+    return true;
+  }
+
+  /**
+   * Ensuring that the size and clear methods are working through the building and clearing of a few
+   * different trees worth of data.
+   *
+   * @return whether or not the test passes
+   */
+  public static boolean test3() {
+    BinarySearchTree<String> stringTree = new BinarySearchTree<String>();
+    stringTree.add("bud");
+    stringTree.add("bud");
+    stringTree.add("mud");
+    if (stringTree.size() != 3) {
+      return false;
+    }
+    stringTree.clear();
+    if (stringTree.size() != 0) {
+      return false;
+    }
+    stringTree.add("bud");
+    stringTree.add("bud");
+    stringTree.add("mud");
+    stringTree.add("mud");
+    stringTree.add("mud");
+    stringTree.add("zud");
+    stringTree.add("zud");
+    stringTree.add("zud");
+    if (stringTree.size() != 8) {
+      return false;
+    }
+    stringTree.clear();
+    if (stringTree.size() != 0) {
+      return false;
+    }
+    stringTree.add("mud");
+    stringTree.add("mud");
+    stringTree.add("mud");
+    stringTree.add("mud");
+    if (stringTree.size() != 4) {
+      return false;
+    }
+    stringTree.clear();
+    if (stringTree.size() != 0) {
+      return false;
+    }
+
     return true;
   }
 }
