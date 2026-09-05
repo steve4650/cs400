@@ -1,6 +1,6 @@
 package P101BinarySearchTree;
 
-class BinarySearchTree<T extends Comparable<T>> implements SortedCollection<T> {
+public class BinarySearchTree<T extends Comparable<T>> implements SortedCollection<T> {
 
   // This is the root note of the binary search tree implemented here.
   protected BinaryNode<T> root = null;
