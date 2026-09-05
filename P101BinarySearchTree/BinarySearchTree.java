@@ -1,6 +1,9 @@
+// TODO remove do not add any package statements to any of your java files
 package P101BinarySearchTree;
 
 class BinarySearchTree<T extends Comparable<T>> implements SortedCollection<T> {
+
+  protected BinaryNode<T> root = null;
 
   @Override
   public void add(T data) throws NullPointerException {
