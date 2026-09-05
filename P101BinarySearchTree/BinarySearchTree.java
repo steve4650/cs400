@@ -5,10 +5,38 @@ class BinarySearchTree<T extends Comparable<T>> implements SortedCollection<T> {
 
   protected BinaryNode<T> root = null;
 
+  public BinarySearchTree() {}
+
+  public BinarySearchTree(T rootData) {
+    this.root = new BinaryNode<T>(rootData);
+  }
+
   @Override
   public void add(T data) throws NullPointerException {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'add'");
+    BinaryNode<T> newNode = new BinaryNode<T>(data);
+    if (this.root == null) {
+      this.root = newNode;
+      return;
+    }
+    addHelper(newNode, this.root);
+  }
+
+  /**
+   * Performs the naive binary search tree insert algorithm to recursively insert the provided
+   * newNode (which has already been initialized with a data value) into the provided tree/subtree.
+   * When the provided subtree is null, this method does nothing.
+   */
+  protected void addHelper(BinaryNode<T> newNode, BinaryNode<T> subtree) {
+    if (newNode.getEntry().compareTo(subtree.getEntry()) <= 0 && subtree.downLeft() == null) {
+      subtree.setLeft(newNode);
+    } else if (newNode.getEntry().compareTo(subtree.getEntry()) <= 0) {
+      addHelper(newNode, subtree.downLeft());
+    } else if (newNode.getEntry().compareTo(subtree.getEntry()) > 0
+        && subtree.downRight() == null) {
+      subtree.setRight(newNode);
+    } else {
+      addHelper(newNode, subtree.downRight());
+    }
   }
 
   @Override
