@@ -63,19 +63,23 @@ class BinarySearchTree<T extends Comparable<T>> implements SortedCollection<T> {
 
   @Override
   public int size() {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'size'");
+    return sizeHelper(this.root);
+  }
+
+  protected int sizeHelper(BinaryNode<T> subtree) {
+    if (subtree.getEntry() == null) {
+      return 0;
+    }
+    return 1 + sizeHelper(subtree.downLeft()) + sizeHelper(subtree.downRight());
   }
 
   @Override
   public boolean isEmpty() {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'isEmpty'");
+    return this.root.getEntry() == null;
   }
 
   @Override
   public void clear() {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'clear'");
+    this.root = null;
   }
 }
