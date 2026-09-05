@@ -24,6 +24,7 @@ public class BinarySearchTree<T extends Comparable<T>> implements SortedCollecti
   protected void addHelper(BinaryNode<T> newNode, BinaryNode<T> subtree) {
     if (newNode.getEntry().compareTo(subtree.getEntry()) <= 0 && subtree.downLeft() == null) {
       subtree.setLeft(newNode);
+      newNode.setUp(subtree);
       return;
     }
     if (newNode.getEntry().compareTo(subtree.getEntry()) <= 0) {
@@ -32,6 +33,7 @@ public class BinarySearchTree<T extends Comparable<T>> implements SortedCollecti
     }
     if (newNode.getEntry().compareTo(subtree.getEntry()) > 0 && subtree.downRight() == null) {
       subtree.setRight(newNode);
+      newNode.setUp(subtree);
       return;
     }
     addHelper(newNode, subtree.downRight());
@@ -84,6 +86,12 @@ public class BinarySearchTree<T extends Comparable<T>> implements SortedCollecti
   }
 
   public void clear() {
+    if(this.root.downLeft() != null) {
+      this.root.downLeft().setUp(null);
+    }
+    if(this.root.downRight() != null) {
+      this.root.downRight().setUp(null);
+    }
     this.root = null;
   }
 }
