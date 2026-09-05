@@ -86,6 +86,9 @@ public class BinarySearchTree<T extends Comparable<T>> implements SortedCollecti
   }
 
   public void clear() {
+    if(this.root == null) {
+      return;
+    }
     if(this.root.downLeft() != null) {
       this.root.downLeft().setUp(null);
     }
