@@ -29,20 +29,36 @@ class BinarySearchTree<T extends Comparable<T>> implements SortedCollection<T> {
   protected void addHelper(BinaryNode<T> newNode, BinaryNode<T> subtree) {
     if (newNode.getEntry().compareTo(subtree.getEntry()) <= 0 && subtree.downLeft() == null) {
       subtree.setLeft(newNode);
-    } else if (newNode.getEntry().compareTo(subtree.getEntry()) <= 0) {
-      addHelper(newNode, subtree.downLeft());
-    } else if (newNode.getEntry().compareTo(subtree.getEntry()) > 0
-        && subtree.downRight() == null) {
-      subtree.setRight(newNode);
-    } else {
-      addHelper(newNode, subtree.downRight());
+      return;
     }
+    if (newNode.getEntry().compareTo(subtree.getEntry()) <= 0) {
+      addHelper(newNode, subtree.downLeft());
+      return;
+    }
+    if (newNode.getEntry().compareTo(subtree.getEntry()) > 0 && subtree.downRight() == null) {
+      subtree.setRight(newNode);
+      return;
+    }
+    addHelper(newNode, subtree.downRight());
   }
 
   @Override
   public boolean contains(Comparable<T> find) {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'contains'");
+    return containsHelper(find, this.root);
+  }
+
+  protected boolean containsHelper(Comparable<T> find, BinaryNode<T> subtree) {
+    if (subtree.getEntry() == null) {
+      return false;
+    }
+    int cmp = find.compareTo(subtree.getEntry());
+    if (cmp == 0) {
+      return true;
+    }
+    if (cmp < 0) {
+      return containsHelper(find, subtree.downLeft());
+    }
+    return containsHelper(find, subtree.downRight());
   }
 
   @Override
