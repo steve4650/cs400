@@ -49,7 +49,7 @@ public class BinarySearchTree<T extends Comparable<T>> implements SortedCollecti
    * @return true if subtree contains data one or more times, and false otherwise
    */
   protected boolean containsHelper(Comparable<T> find, BinaryNode<T> subtree) {
-    if (subtree.getEntry() == null) {
+    if (subtree == null) {
       return false;
     }
     int cmp = find.compareTo(subtree.getEntry());
@@ -80,7 +80,7 @@ public class BinarySearchTree<T extends Comparable<T>> implements SortedCollecti
   }
 
   public boolean isEmpty() {
-    return this.root.getEntry() == null;
+    return this.root == null;
   }
 
   public void clear() {
