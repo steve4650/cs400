@@ -23,30 +23,38 @@ public class Main {
   private static void testClassRequirements() {
     Class<?> treeClass = BinarySearchTree.class;
     check(Modifier.isPublic(treeClass.getModifiers()), "BinarySearchTree should be public");
-    check(!Modifier.isAbstract(treeClass.getModifiers()), "BinarySearchTree should be instantiable");
-    check(SortedCollection.class.isAssignableFrom(treeClass),
+    check(
+        !Modifier.isAbstract(treeClass.getModifiers()), "BinarySearchTree should be instantiable");
+    check(
+        SortedCollection.class.isAssignableFrom(treeClass),
         "BinarySearchTree should implement SortedCollection");
     TypeVariable<?> typeParameter = treeClass.getTypeParameters()[0];
 
     try {
       Constructor<?> constructor = treeClass.getConstructor();
-      check(Modifier.isPublic(constructor.getModifiers()), "BinarySearchTree should have a public no-argument constructor");
+      check(
+          Modifier.isPublic(constructor.getModifiers()),
+          "BinarySearchTree should have a public no-argument constructor");
 
       Field[] fields = treeClass.getDeclaredFields();
       check(fields.length == 1, "BinarySearchTree should only declare the root field");
       check(fields[0].getName().equals("root"), "the tree field should be named root");
       check(Modifier.isProtected(fields[0].getModifiers()), "root should be protected");
       check(fields[0].getType().equals(BinaryNode.class), "root should have BinaryNode type");
-      check(!Modifier.isPrivate(fields[0].getModifiers()), "BinarySearchTree should not have private fields");
+      check(
+          !Modifier.isPrivate(fields[0].getModifiers()),
+          "BinarySearchTree should not have private fields");
 
       Method helper = treeClass.getDeclaredMethod("addHelper", BinaryNode.class, BinaryNode.class);
       check(Modifier.isProtected(helper.getModifiers()), "addHelper should be protected");
       check(helper.getReturnType().equals(Void.TYPE), "addHelper should return void");
     } catch (ReflectiveOperationException exception) {
-      throw new AssertionError("required BinarySearchTree constructor or helper is missing", exception);
+      throw new AssertionError(
+          "required BinarySearchTree constructor or helper is missing", exception);
     }
 
-    check(new BinarySearchTree<Integer>().root == null,
+    check(
+        new BinarySearchTree<Integer>().root == null,
         "root should be null immediately after construction");
   }
 
@@ -107,15 +115,19 @@ public class Main {
     check(tree.root.getEntry() == 50, "first inserted value should be the root");
     check(tree.root.downLeft().getEntry() == 25, "smaller values should be in the left subtree");
     check(tree.root.downRight().getEntry() == 75, "larger values should be in the right subtree");
-    check(tree.root.downLeft().downLeft().getEntry() == 25,
+    check(
+        tree.root.downLeft().downLeft().getEntry() == 25,
         "duplicate values should be stored in the left subtree");
     check(tree.root.downLeft().up() == tree.root, "left child should reference its parent");
     check(tree.root.downRight().up() == tree.root, "right child should reference its parent");
-    check(tree.root.downLeft().downLeft().up() == tree.root.downLeft(),
+    check(
+        tree.root.downLeft().downLeft().up() == tree.root.downLeft(),
         "duplicate node should reference its parent");
-    check(tree.root.downLeft().downLeft().downRight() == null,
+    check(
+        tree.root.downLeft().downLeft().downRight() == null,
         "new nodes should retain null child references");
-    check(tree.root.toInOrderString().equals("[ 10, 25, 25, 30, 50, 60, 75, 90 ]"),
+    check(
+        tree.root.toInOrderString().equals("[ 10, 25, 25, 30, 50, 60, 75, 90 ]"),
         "in-order traversal should be sorted and include duplicates");
   }
 
