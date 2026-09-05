@@ -73,7 +73,7 @@ public class BinarySearchTree<T extends Comparable<T>> implements SortedCollecti
    * @return the number of values in the subtree (counting duplicates)
    */
   protected int sizeHelper(BinaryNode<T> subtree) {
-    if (subtree.getEntry() == null) {
+    if (subtree == null) {
       return 0;
     }
     return 1 + sizeHelper(subtree.downLeft()) + sizeHelper(subtree.downRight());

@@ -9,5 +9,7 @@ public class Main {
     tree.add("mud");
     tree.add("mud");
     System.out.println(tree.size());
+    tree.clear();
+    System.out.println(tree.size());
   }
 }
