@@ -22,20 +22,25 @@ public class BinarySearchTree<T extends Comparable<T>> implements SortedCollecti
    * When the provided subtree is null, this method does nothing.
    */
   protected void addHelper(BinaryNode<T> newNode, BinaryNode<T> subtree) {
+    // Case: new node belongs to the left, and current left node is null
     if (newNode.getEntry().compareTo(subtree.getEntry()) <= 0 && subtree.downLeft() == null) {
       subtree.setLeft(newNode);
       newNode.setUp(subtree);
       return;
     }
+    // Case: new node belongs to the left, and current left node is not null. So we should recurse!
     if (newNode.getEntry().compareTo(subtree.getEntry()) <= 0) {
       addHelper(newNode, subtree.downLeft());
       return;
     }
+    // Case: new node belongs to the right, and current right node is null
     if (newNode.getEntry().compareTo(subtree.getEntry()) > 0 && subtree.downRight() == null) {
       subtree.setRight(newNode);
       newNode.setUp(subtree);
       return;
     }
+    // Case: new node belongs to the right, and current right node is not null. So we should
+    // recurse!
     addHelper(newNode, subtree.downRight());
   }
 
@@ -63,6 +68,7 @@ public class BinarySearchTree<T extends Comparable<T>> implements SortedCollecti
     if (cmp < 0) {
       return containsHelper(find, subtree.downLeft());
     }
+    // else: cmd >= 0
     return containsHelper(find, subtree.downRight());
   }
 
