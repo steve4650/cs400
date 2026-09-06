@@ -102,17 +102,19 @@ public class BinarySearchTree<T extends Comparable<T>> implements SortedCollecti
   }
 
   public static void main() {
-    boolean result = test1();
+    BinarySearchTree<Integer> testTree1 = new BinarySearchTree<Integer>();
+    boolean result = testTree1.test1();
     if (!result) {
       System.out.println("failed test1");
       return;
     }
-    result = test2();
+    result = testTree1.test2();
     if (!result) {
       System.out.println("failed test2");
       return;
     }
-    result = test3();
+    BinarySearchTree<String> testTree2 = new BinarySearchTree<String>();
+    result = testTree2.test3();
     if (!result) {
       System.out.println("failed test3");
       return;
@@ -126,7 +128,7 @@ public class BinarySearchTree<T extends Comparable<T>> implements SortedCollecti
    *
    * @return whether or not the test passes
    */
-  public static boolean test1() {
+  public boolean test1() {
     BinarySearchTree<Integer> intTree = new BinarySearchTree<Integer>();
     intTree.add(0);
     intTree.add(-1);
@@ -167,7 +169,7 @@ public class BinarySearchTree<T extends Comparable<T>> implements SortedCollecti
    *
    * @return whether or not the test passes
    */
-  public static boolean test2() {
+  public boolean test2() {
     BinarySearchTree<Integer> intTree = new BinarySearchTree<Integer>();
     intTree.add(-1);
     intTree.add(1);
@@ -194,7 +196,7 @@ public class BinarySearchTree<T extends Comparable<T>> implements SortedCollecti
    *
    * @return whether or not the test passes
    */
-  public static boolean test3() {
+  public boolean test3() {
     BinarySearchTree<String> stringTree = new BinarySearchTree<String>();
     stringTree.add("bud");
     stringTree.add("bud");
