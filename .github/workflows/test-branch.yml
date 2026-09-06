@@ -27,4 +27,4 @@ jobs:
           git status -s 2>/dev/null | python3 -c "import sys; sys.exit(0 if len(sys.stdin.read()) == 0 else 1)"
       - name: check for TODO string instances
         run: |
-          git ls-files | grep -v test-branch\.yml | xargs grep -Ii todo | wc -l | python3 -c "import sys; sys.exit(0 if int(sys.argv[1]) == 0 else 1)"
+          git ls-files | grep -v test-branch\.yml | xargs grep -Ii todo | wc -l | xargs python3 -c "import sys; sys.exit(0 if int(sys.argv[1]) == 0 else 1)"
