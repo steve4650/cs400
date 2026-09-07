@@ -5,6 +5,10 @@ fmt:
 	bun i
 	bun run oxfmt
 
+run:
+	javac P101BinarySearchTree/*.java && java P101BinarySearchTree.BinarySearchTree
+
 clean:
-	cat P101BinarySearchTree/BinarySearchTree.java | grep -v "^package" | sed -e "s/ implements SortedCollection<T>//" >~/Downloads/BinarySearchTree.java
-	$(info "P101: submit ~/Downloads/BinarySearchTree.java")
+	mkdir -p /tmp/cs400/01
+	cat P101BinarySearchTree/BinarySearchTree.java | grep -v "^package" | sed -e "s/ implements SortedCollection<T>//" >/tmp/cs400/01/BinarySearchTree.java
+	$(info "P101: submit /tmp/cs400/01/BinarySearchTree.java")

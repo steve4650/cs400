@@ -107,7 +107,7 @@ public class BinarySearchTree<T extends Comparable<T>> implements SortedCollecti
     this.root = null;
   }
 
-  public static void main() {
+  public static void main(String[] args) {
     BinarySearchTree<Integer> testTree1 = new BinarySearchTree<Integer>();
     boolean result = testTree1.test1();
     if (!result) {
