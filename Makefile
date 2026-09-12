@@ -7,6 +7,7 @@ fmt:
 
 run:
 	javac P101BinarySearchTree/*.java && java P101BinarySearchTree.BinarySearchTree
+	javac P102BSTRotation/*.java && java P102BSTRotation.BSTRotation
 
 clean:
 	mkdir -p /tmp/cs400/01
