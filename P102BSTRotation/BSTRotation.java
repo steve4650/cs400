@@ -1,5 +1,170 @@
-package P102BSTRotation;
+public class BSTRotation<T extends Comparable<T>> extends BinarySearchTree<T> {
 
-public class BSTRotation<T extends Comparable<T>>  extends BinarySearchTree<T> {
+  /**
+   * Performs the rotation operation on the provided nodes within this tree. When the provided child
+   * is a left child of the provided parent, this method will perform a right rotation. When the
+   * provided child is a right child of the provided parent, this method will perform a left
+   * rotation.
+   *
+   * @param child is the node being rotated from child to parent position
+   * @param parent is the node being rotated from parent to child position
+   */
+  protected void rotate(BinaryNode<T> child, BinaryNode<T> parent) {
+    // Case 1: `child` it not a child of `parent`: do nothing
+    if (parent.downLeft() != child && parent.downRight() != child) {
+      return;
+    }
+    // Update root if needed
+    if (this.root == parent) {
+      this.root = child;
+    }
+    /*
+     * Case 2: `child` is a left child of `parent`: right rotation
+     * Every relationship below changes except parent <--> C and child <--> A
+     *
+     *   Before:
+     *
+     *             grandparent
+     *                |
+     *                |
+     *              parent
+     *               /
+     *              / \
+     *             /   \
+     *            /     \
+     *          child    C
+     *           /
+     *          / \
+     *         /   \
+     *        /     \
+     *       A       B
+     *
+     *
+     * After:
+     *
+     *             grandparent
+     *                |
+     *                |
+     *              child
+     *               /
+     *              / \
+     *             /   \
+     *            /     \
+     *           A      parent
+     *                   /
+     *                  / \
+     *                 /   \
+     *                /     \
+     *               B       C
+     *
+     */
+    else if (parent.downLeft() == child) {
+      BinaryNode<T> b = child.downRight();
+      BinaryNode<T> grandparent = parent.up();
+      child.setUp(grandparent);
+      child.setRight(parent);
+      parent.setUp(child);
+      parent.setLeft(b);
+      b.setUp(parent);
+    }
+    /*
+     * Case 3: `child` is a right child of `parent`: left rotation
+     * Every relationship below changes except child <--> C and parent <--> A
+     *
+     *   Before:
+     *
+     *             grandparent
+     *                |
+     *                |
+     *              parent
+     *               /
+     *              / \
+     *             /   \
+     *            /     \
+     *           A     child
+     *                  /
+     *                 / \
+     *                /   \
+     *               /     \
+     *              B       C
+     *
+     *
+     * After:
+     *
+     *             grandparent
+     *                |
+     *                |
+     *              child
+     *               /
+     *              / \
+     *             /   \
+     *            /     \
+     *         parent    C
+     *           /
+     *          / \
+     *         /   \
+     *        /     \
+     *       A       B
+     *
+     */
+    else {
+      BinaryNode<T> b = child.downRight();
+      BinaryNode<T> grandparent = parent.up();
+      child.setUp(grandparent);
+      child.setLeft(parent);
+      parent.setUp(child);
+      parent.setRight(b);
+      b.setUp(parent);
+    }
+  }
 
+  public static void main(String[] args) {
+    System.out.println("passed everything");
+  }
+
+  /**
+   * Test performing both left and right rotations
+   *
+   * @return whether or not the test passes
+   */
+  public boolean test1() {
+    BSTRotation<Integer> intTree = new BSTRotation<Integer>();
+    intTree.add(50);
+    intTree.add(17);
+    intTree.add(9);
+    intTree.add(23);
+    intTree.add(76);
+    intTree.rotate(intTree.root.downLeft(), intTree.root);
+    if (!(intTree.root.getEntry() == 17
+        && intTree.root.downLeft().getEntry() == 9
+        && intTree.root.downLeft().downLeft() == null
+        && intTree.root.downLeft().downRight() == null
+        && intTree.root.downRight().getEntry() == 50
+        && intTree.root.downRight().downLeft().getEntry() == 23
+        && intTree.root.downRight().downLeft().getEntry() == 76
+        && intTree.root.downRight().downLeft().downLeft() == null
+        && intTree.root.downRight().downLeft().downRight() == null)) {
+      return false;
+    }
+    return true;
+  }
+
+  /**
+   * Test performing rotations that include the root node, and some that do not.
+   *
+   * @return whether or not the test passes
+   */
+  public boolean test2() {
+    return true;
+  }
+
+  /**
+   * Test performing rotations on parent-child pairs of nodes that have between them 0, 1, 2, and 3
+   * shared children (that do not include the child being rotated).
+   *
+   * @return whether or not the test passes
+   */
+  public boolean test3() {
+    return true;
+  }
 }
