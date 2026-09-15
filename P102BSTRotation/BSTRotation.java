@@ -134,6 +134,7 @@ public class BSTRotation<T extends Comparable<T>> extends BinarySearchTree<T> {
     intTree.add(9);
     intTree.add(23);
     intTree.add(76);
+    // left rotation
     intTree.rotate(intTree.root.downLeft(), intTree.root);
     if (!(intTree.root.getEntry() == 17
         && intTree.root.downLeft().getEntry() == 9
@@ -144,6 +145,21 @@ public class BSTRotation<T extends Comparable<T>> extends BinarySearchTree<T> {
         && intTree.root.downRight().downLeft().getEntry() == 76
         && intTree.root.downRight().downLeft().downLeft() == null
         && intTree.root.downRight().downLeft().downRight() == null)) {
+      return false;
+    }
+    // right rotation
+    intTree.rotate(intTree.root.downRight(), intTree.root);
+    if (!(intTree.root.getEntry() == 50
+        && intTree.root.downLeft().getEntry() == 17
+        && intTree.root.downLeft().downLeft().getEntry() == 9
+        && intTree.root.downLeft().downLeft().downLeft() == null
+        && intTree.root.downLeft().downLeft().downRight() == null
+        && intTree.root.downLeft().downRight().getEntry() == 23
+        && intTree.root.downLeft().downRight().downLeft() == null
+        && intTree.root.downLeft().downRight().downRight() == null
+        && intTree.root.downRight().getEntry() == 76
+        && intTree.root.downRight().downLeft() == null
+        && intTree.root.downRight().downRight() == null)) {
       return false;
     }
     return true;
