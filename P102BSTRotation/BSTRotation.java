@@ -204,6 +204,35 @@ public class BSTRotation<T extends Comparable<T>> extends BinarySearchTree<T> {
 
       return false;
     }
+    
+    // does not include root
+    BSTRotation<Integer> intTree2 = new BSTRotation<Integer>();
+    intTree2.add(105);
+    intTree2.add(100);
+    intTree2.add(34);
+    intTree2.add(18);
+    intTree2.add(46);
+    intTree2.add(101);
+    // left rotation
+    intTree2.rotate(intTree2.root.downLeft().downLeft(), intTree2.root.downLeft());
+    if (!(intTree2.root.downLeft().getEntry() == 34)) {
+      System.out.println("MOMOP");
+      System.out.println(intTree2.root.downLeft().getEntry());
+      return  false;
+    }
+    if((
+       intTree2.root.downLeft().downLeft().getEntry() == 18
+        && intTree2.root.downLeft().downLeft().downLeft() == null
+        && intTree2.root.downLeft().downLeft().downRight() == null
+        && intTree2.root.downLeft().downRight().getEntry() == 100
+        && intTree2.root.downLeft().downRight().downLeft().getEntry() == 46
+        && intTree2.root.downLeft().downRight().downRight().getEntry() == 101
+        && intTree2.root.downLeft().downRight().downLeft().downLeft() == null
+        && intTree2.root.downLeft().downRight().downLeft().downRight() == null)) {
+
+      return false;
+    }
+ 
     return true;
   }
 
