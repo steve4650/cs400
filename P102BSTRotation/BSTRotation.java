@@ -58,7 +58,7 @@ public class BSTRotation<T extends Comparable<T>> extends BinarySearchTree<T> {
      *               B       C
      *
      */
-    else if (parent.downLeft() == child) {
+    if (parent.downLeft() == child) {
       BinaryNode<T> b = child.downRight();
       BinaryNode<T> grandparent = parent.up();
       child.setUp(grandparent);
@@ -119,6 +119,12 @@ public class BSTRotation<T extends Comparable<T>> extends BinarySearchTree<T> {
   }
 
   public static void main(String[] args) {
+    BSTRotation<Integer> testRotation = new BSTRotation<>();
+    boolean result = testRotation.test1();
+    if (!result) {
+      System.out.println("failed test1");
+      return;
+    }
     System.out.println("passed everything");
   }
 
@@ -142,9 +148,10 @@ public class BSTRotation<T extends Comparable<T>> extends BinarySearchTree<T> {
         && intTree.root.downLeft().downRight() == null
         && intTree.root.downRight().getEntry() == 50
         && intTree.root.downRight().downLeft().getEntry() == 23
-        && intTree.root.downRight().downLeft().getEntry() == 76
+        && intTree.root.downRight().downRight().getEntry() == 76
         && intTree.root.downRight().downLeft().downLeft() == null
         && intTree.root.downRight().downLeft().downRight() == null)) {
+
       return false;
     }
     // right rotation
