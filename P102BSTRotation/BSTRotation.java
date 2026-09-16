@@ -269,25 +269,23 @@ public class BSTRotation<T extends Comparable<T>> extends BinarySearchTree<T> {
         && stringTree.root.downLeft().downRight().getEntry() == "yoe")) {
       return false;
     }
-        // 2 shared children
+    // 2 shared children
     stringTree.add("xoe");
     stringTree.rotate(stringTree.root.downLeft(), stringTree.root);
     if (!(stringTree.root.getEntry() == "roe"
         && stringTree.root.downRight().getEntry() == "zoe"
         && stringTree.root.downRight().downLeft().getEntry() == "yoe"
-        && stringTree.root.downRight().downLeft().downLeft().getEntry() == "xoe"
-      )) {
+        && stringTree.root.downRight().downLeft().downLeft().getEntry() == "xoe")) {
       return false;
     }
-         // 3 shared children
+    // 3 shared children
     stringTree.add("voe");
     stringTree.rotate(stringTree.root.downRight(), stringTree.root);
     if (!(stringTree.root.getEntry() == "zoe"
         && stringTree.root.downLeft().getEntry() == "roe"
         && stringTree.root.downLeft().downRight().getEntry() == "yoe"
         && stringTree.root.downLeft().downRight().downLeft().getEntry() == "xoe"
-        && stringTree.root.downLeft().downRight().downLeft().downLeft().getEntry() == "voe"
-      )) {
+        && stringTree.root.downLeft().downRight().downLeft().downLeft().getEntry() == "voe")) {
       return false;
     }
     return true;
