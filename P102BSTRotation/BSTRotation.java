@@ -137,6 +137,11 @@ public class BSTRotation<T extends Comparable<T>> extends BinarySearchTree<T> {
       System.out.println("failed test2");
       return;
     }
+    result = testRotation.test3();
+    if (!result) {
+      System.out.println("failed test3");
+      return;
+    }
     System.out.println("passed everything");
   }
 
@@ -244,6 +249,14 @@ public class BSTRotation<T extends Comparable<T>> extends BinarySearchTree<T> {
    * @return whether or not the test passes
    */
   public boolean test3() {
+    BSTRotation<String> stringTree = new BSTRotation<String>();
+    stringTree.add("zoe");
+    stringTree.add("roe");
+    // left rotation
+    stringTree.rotate(stringTree.root.downLeft(), stringTree.root);
+    if (!(stringTree.root.getEntry() == "roe" && stringTree.root.downLeft().getEntry() == "zoe")) {
+      return false;
+    }
     return true;
   }
 }
