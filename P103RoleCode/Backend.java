@@ -1,11 +1,16 @@
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
 public class Backend implements BackendInterface {
 
   protected BinarySearchTree<GameRecord> tree;
+
+  protected Integer low = null;
+  protected Integer high = null;
+  protected String filter = "";
 
   public Backend() {
     this.tree = new BinarySearchTree<GameRecord>();
@@ -81,14 +86,35 @@ public class Backend implements BackendInterface {
 
   @Override
   public List<String> getAndSetRange(Integer low, Integer high) {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'getAndSetRange'");
+    this.low = low;
+    this.high = high;
+    return getAndSetRangeHelper(tree.root, new ArrayList<String>());
+  }
+
+  private List<String> getAndSetRangeHelper(BinaryNode<GameRecord> node, List<String> names) {
+    if (node == null) {
+      return new ArrayList<String>();
+    }
+    if ((this.low == null || node.getEntry().getLevel() >= this.low)
+        && (this.high == null || node.getEntry().getLevel() <= this.high)) {
+      List<String> left = getAndSetRangeHelper(node.downLeft(), names);
+      if (this.filter.isBlank() || node.getEntry().getCompletionTime().compareTo(this.filter) < 0) {
+        left.add(node.getEntry().getName());
+      }
+      left.add(node.getEntry().getName());
+      left.addAll(getAndSetRangeHelper(node.downRight(), names));
+    }
+    return names;
   }
 
   @Override
   public List<String> applyAndSetFilter(String time) {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'applyAndSetFilter'");
+    if (time == null) {
+      this.filter = "";
+    } else {
+      this.filter = time;
+    }
+    return getAndSetRange(null, null);
   }
 
   @Override
