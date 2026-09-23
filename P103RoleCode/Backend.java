@@ -1,6 +1,7 @@
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Scanner;
 
@@ -88,21 +89,22 @@ public class Backend implements BackendInterface {
   public List<String> getAndSetRange(Integer low, Integer high) {
     this.low = low;
     this.high = high;
-    return getAndSetRangeHelper(tree.root, new ArrayList<String>());
+    return getAndSetRangeHelper(tree.root, new ArrayList<GameRecord>()).stream().map(record -> record.getName()).toList();
   }
 
-  private List<String> getAndSetRangeHelper(BinaryNode<GameRecord> node, List<String> names) {
+  private List<GameRecord> getAndSetRangeHelper(BinaryNode<GameRecord> node, List<GameRecord> names) {
     if (node == null) {
-      return new ArrayList<String>();
+      return new ArrayList<GameRecord>();
     }
     if ((this.low == null || node.getEntry().getLevel() >= this.low)
         && (this.high == null || node.getEntry().getLevel() <= this.high)) {
-      List<String> left = getAndSetRangeHelper(node.downLeft(), names);
+      List<GameRecord> left = getAndSetRangeHelper(node.downLeft(), names);
       if (this.filter.isBlank() || node.getEntry().getCompletionTime().compareTo(this.filter) < 0) {
-        left.add(node.getEntry().getName());
+        left.add(node.getEntry());
       }
-      left.add(node.getEntry().getName());
+      left.add(node.getEntry());
       left.addAll(getAndSetRangeHelper(node.downRight(), names));
+      return left;
     }
     return names;
   }
@@ -119,7 +121,8 @@ public class Backend implements BackendInterface {
 
   @Override
   public List<String> getTopTen() {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'getTopTen'");
+    List<GameRecord> results = getAndSetRangeHelper(this.tree.root, new ArrayList<GameRecord>());
+    results.sort(Comparator.comparingInt(record->record.getCollectables()));
+    return results.reversed().stream().limit(10).map(record -> record.getName()).toList();
   }
 }
