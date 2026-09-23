@@ -38,14 +38,13 @@ public class Backend implements BackendInterface {
   }
 
   private GameRecord gameRecordBuilder(String[] headers, String[] cols) throws IOException {
-    String name = "";
+    String name = null;
     GameRecord.Continent location = null;
     int score = 0;
     int collectables = 0;
     int level = 0;
-    String completionTime = "";
+    String completionTime = null;
     for (int i = 0; i < headers.length; i++) {
-      // name,continent,score,max_health,damage_taken,damage_given,collectables,level,completion_time
       if (headers[i] == "name") {
         name = headers[i];
       } else if (headers[i] == "continent") {
@@ -60,7 +59,7 @@ public class Backend implements BackendInterface {
         completionTime = headers[i];
       }
     }
-      return new GameRecord(name, location, score, collectables, level, completionTime);
+    return new GameRecord(name, location, score, collectables, level, completionTime);
   }
 
   @Override
@@ -68,7 +67,7 @@ public class Backend implements BackendInterface {
     FileInputStream file = new FileInputStream(filename);
     Scanner scan = new Scanner(file);
     if (!scan.hasNextLine()) {
-        scan.close();
+      scan.close();
       return;
     }
     String[] headers = scan.nextLine().split(",");
