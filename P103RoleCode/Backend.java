@@ -23,44 +23,48 @@ public class Backend implements BackendInterface {
   @Override
   public void readData(String filename) throws IOException {
     File file = new File(filename);
-    try (Scanner scan = new Scanner(file)) {
-      if (!scan.hasNextLine()) {
-        return;
-      }
-      String[] headers = scan.nextLine().split(",");
-      int nameIndex = -1;
-      int continentIndex = -1;
-      int scoreIndex = -1;
-      int collectablesIndex = -1;
-      int levelIndex = -1;
-      int timeIndex = -1;
+    Scanner scan = new Scanner(file);
 
-      for (int i = 0; i < headers.length; i++) {
-        String col = headers[i].trim();
-        if (col.equals("name")) nameIndex = i;
-        else if (col.equals("continent")) continentIndex = i;
-        else if (col.equals("score")) scoreIndex = i;
-        else if (col.equals("collectables")) collectablesIndex = i;
-        else if (col.equals("level")) levelIndex = i;
-        else if (col.equals("completion_time")) timeIndex = i;
-      }
-
-      while (scan.hasNextLine()) {
-        String line = scan.nextLine().trim();
-        if (line.isEmpty()) continue;
-        String[] cols = line.split(",");
-
-        // build the GameRecord
-        String name = cols[nameIndex].trim();
-        GameRecord.Continent location = GameRecord.Continent.valueOf(cols[continentIndex].trim());
-        int score = Integer.parseInt(cols[scoreIndex].trim());
-        int collectables = Integer.parseInt(cols[collectablesIndex].trim());
-        int level = Integer.parseInt(cols[levelIndex].trim());
-        String completionTime = cols[timeIndex].trim();
-
-        addRecord(new GameRecord(name, location, score, collectables, level, completionTime));
-      }
+    if (!scan.hasNextLine()) {
+      scan.close();
+      return;
     }
+
+    String[] headers = scan.nextLine().split(",");
+    int nameIndex = -1;
+    int continentIndex = -1;
+    int scoreIndex = -1;
+    int collectablesIndex = -1;
+    int levelIndex = -1;
+    int timeIndex = -1;
+
+    for (int i = 0; i < headers.length; i++) {
+      String col = headers[i].trim();
+      if (col.equals("name")) nameIndex = i;
+      else if (col.equals("continent")) continentIndex = i;
+      else if (col.equals("score")) scoreIndex = i;
+      else if (col.equals("collectables")) collectablesIndex = i;
+      else if (col.equals("level")) levelIndex = i;
+      else if (col.equals("completion_time")) timeIndex = i;
+    }
+
+    while (scan.hasNextLine()) {
+      String line = scan.nextLine().trim();
+      if (line.isEmpty()) continue;
+      String[] cols = line.split(",");
+
+      // build the GameRecord
+      String name = cols[nameIndex].trim();
+      GameRecord.Continent location = GameRecord.Continent.valueOf(cols[continentIndex].trim());
+      int score = Integer.parseInt(cols[scoreIndex].trim());
+      int collectables = Integer.parseInt(cols[collectablesIndex].trim());
+      int level = Integer.parseInt(cols[levelIndex].trim());
+      String completionTime = cols[timeIndex].trim();
+
+      addRecord(new GameRecord(name, location, score, collectables, level, completionTime));
+    }
+
+    scan.close();
   }
 
   @Override
