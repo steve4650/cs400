@@ -94,7 +94,7 @@ public class Backend implements BackendInterface {
   /*
    * Return game records from the backend's tree, filtered by level (this.low and this.high)
    * and completion time (this.filterTime). If any of these filters are null, they are ignored.
-   * 
+   *
    * @return List of GameRecord objects
    */
   protected List<GameRecord> getFilteredGameRecords() {
@@ -122,10 +122,10 @@ public class Backend implements BackendInterface {
     return records;
   }
 
-    /*
+  /*
    * Return game records names from the backend's tree. The records filtered by level (this.low and this.high)
    * and completion time (this.filterTime). If any of these filters are null, they are ignored.
-   * 
+   *
    * @return List of GameRecord names (Strings)
    */
   protected List<String> getFilteredRecordNames() {
