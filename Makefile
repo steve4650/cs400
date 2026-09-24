@@ -8,10 +8,7 @@ fmt:
 run:
 	javac P101BinarySearchTree/*.java && java P101BinarySearchTree.BinarySearchTree
 	cd P102BSTRotation && javac *.java && java BSTRotation
-	cd P103RoleCode && javac -cp .:../junit5.jar *.java && java -jar ../junit5.jar --class-path . --select-class BackendTests
-
-runBackendTests:
-	cd P103RoleCode && javac -cp .:../junit5.jar *.java && java -jar ../junit5.jar --class-path . --select-class BackendTests
+	cd P103RoleCode && javac -cp .:../junit5.jar *.java && java -jar ../junit5.jar -cp . -c BackendTests
 
 clean:
 	mkdir -p /tmp/cs400/01
