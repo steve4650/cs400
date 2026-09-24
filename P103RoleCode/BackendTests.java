@@ -1,5 +1,4 @@
-import static org.junit.jupiter.api.Assertions.*;
-
+import static org.junit.jupiter.api.Assertions;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 
@@ -17,14 +16,14 @@ public class BackendTests {
   @Test
   public void roleTest1() {
     Tree_Placeholder tree = new Tree_Placeholder();
-    Backend backend = new Backend(tree);
+    Backend backend = new Backend();
 
     // Call 1: addRecord
     GameRecord newRecord =
         new GameRecord(
             "testHero", GameRecord.Continent.NORTH_AMERICA, 45000, 200, 450, "500:00:00");
     backend.addRecord(newRecord);
-    assertEquals(newRecord, tree.lastAddedGameRecord);
+    Assertions.assertEquals(newRecord, tree.lastAddedGameRecord);
 
     // Call 2: getAndSetRange (range 300 to 480)
     // Placeholder has: speedRoyalty (479), xXxgamer47xXx (493), v0idt3mp0 (353), plus testHero
@@ -68,20 +67,14 @@ public class BackendTests {
   }
 
   /**
-   * roleTest3 tests loading data from a CSV file using readData. It verifies that reading valid CSV
-   * data populates the backend tree without throwing IOException.
+   * roleTest3 tests loading data from a CSV file using readData.
    */
   @Test
   public void roleTest3() {
-    Tree_Placeholder tree = new Tree_Placeholder();
-    Backend backend = new Backend(tree);
+    Backend backend = new Backend();
 
-    // Call 5: readData
-    assertDoesNotThrow(
-        () -> {
-          backend.readData("records.csv");
-        },
-        "readData should successfully read records.csv without throwing exceptions");
+    backend.readData("records.csv");
+
 
     assertNotNull(tree.lastAddedGameRecord, "readData should have added records to tree");
     List<String> records = backend.getAndSetRange(null, null);
