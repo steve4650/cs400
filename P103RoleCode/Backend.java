@@ -99,13 +99,13 @@ public class Backend implements BackendInterface {
    */
   protected List<GameRecord> getFilteredGameRecords() {
     if (this.low != null) {
-      this.tree.setIteratorMin(new GameRecord("", null, 0, 0, this.low, ""));
+      this.tree.setIteratorMin(new GameRecord("", GameRecord.Continent.ANTARCTICA, 0, 0, this.low, ""));
     } else {
       this.tree.setIteratorMin(null);
     }
 
     if (this.high != null) {
-      this.tree.setIteratorMax(new GameRecord("", null, 0, 0, this.high, ""));
+      this.tree.setIteratorMax(new GameRecord("", GameRecord.Continent.ANTARCTICA, 0, 0, this.high, ""));
     } else {
       this.tree.setIteratorMax(null);
     }
@@ -116,7 +116,7 @@ public class Backend implements BackendInterface {
       if (record == null) continue;
       if (this.low != null && record.getLevel() < this.low) continue;
       if (this.high != null && record.getLevel() > this.high) continue;
-      if (!record.getCompletionTime().equals(this.filterTime)) continue;
+      if (record.getCompletionTime().compareTo(this.filterTime) > 0) continue;
       records.add(record);
     }
     return records;
