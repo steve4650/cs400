@@ -8,6 +8,7 @@ fmt:
 run:
 	javac P101BinarySearchTree/*.java && java P101BinarySearchTree.BinarySearchTree
 	cd P102BSTRotation && javac *.java && java BSTRotation
+	stat junit5.jar || wget https://pages.cs.wisc.edu/~cs400/junit5.jar
 	cd P103RoleCode && javac -cp .:../junit5.jar *.java && java -jar ../junit5.jar -cp . -c BackendTests
 
 clean:
