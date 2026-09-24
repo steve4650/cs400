@@ -36,14 +36,16 @@ public class BackendTests {
   }
 
   /**
-   * roleTest2 tests applying completion time filter using applyAndSetFilter and retrieving top ten
-   * records using getTopTen. It verifies that time filter properly excludes records exceeding max
-   * time and getTopTen returns top records ordered by collectables.
+   * roleTest2 tests the size of the values of filtered slices of the dummy data returned by Tree_Placeholder.
+   * 
    */
   @Test
   public void roleTest2() {
     Backend backend = new Backend();
-    Assertions.assertTrue(true);
+    Assertions.assertEquals(2, backend.getAndSetRange(400, 500).size());
+    Assertions.assertEquals(1, backend.getAndSetRange(300, 400).size());
+    Assertions.assertEquals(3, backend.getAndSetRange(null, null).size());
+    Assertions.assertEquals(0, backend.getAndSetRange(null, -3).size());
   }
 
   /** roleTest3 tests loading data from a CSV file using readData. */

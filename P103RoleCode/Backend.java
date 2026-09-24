@@ -118,7 +118,7 @@ public class Backend implements BackendInterface {
       if (record == null) continue;
       if (this.low != null && record.getLevel() < this.low) continue;
       if (this.high != null && record.getLevel() > this.high) continue;
-      if (record.getCompletionTime().compareTo(this.filterTime) > 0) continue;
+      if (this.filterTime != null && record.getCompletionTime().compareTo(this.filterTime) > 0) continue;
       records.add(record);
     }
     return records;
