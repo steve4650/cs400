@@ -91,7 +91,13 @@ public class Backend implements BackendInterface {
     return result;
   }
 
-  List<GameRecord> getFilteredGameRecords() {
+  /*
+   * Return game records from the backend's tree, filtered by level (this.low and this.high)
+   * and completion time (this.filterTime). If any of these filters are null, they are ignored.
+   * 
+   * @return List of GameRecord objects
+   */
+  protected List<GameRecord> getFilteredGameRecords() {
     if (this.low != null) {
       this.tree.setIteratorMin(new GameRecord("", null, 0, 0, this.low, ""));
     } else {
@@ -116,7 +122,13 @@ public class Backend implements BackendInterface {
     return records;
   }
 
-  List<String> getFilteredRecordNames() {
+    /*
+   * Return game records names from the backend's tree. The records filtered by level (this.low and this.high)
+   * and completion time (this.filterTime). If any of these filters are null, they are ignored.
+   * 
+   * @return List of GameRecord names (Strings)
+   */
+  protected List<String> getFilteredRecordNames() {
     List<GameRecord> records = getFilteredGameRecords();
     List<String> names = new ArrayList<>();
     for (GameRecord record : records) {
