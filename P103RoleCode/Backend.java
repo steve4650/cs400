@@ -11,8 +11,8 @@ public class Backend implements BackendInterface {
   Integer high = null;
   String filterTime = null;
 
-  public Backend(IterableSortedCollection<GameRecord> tree) {
-    this.tree = tree;
+  public Backend() {
+    this.tree = new Tree_Placeholder();
   }
 
   @Override
@@ -28,21 +28,21 @@ public class Backend implements BackendInterface {
         return;
       }
       String[] headers = scan.nextLine().split(",");
-      int nameIdx = -1;
-      int continentIdx = -1;
-      int scoreIdx = -1;
-      int collectablesIdx = -1;
-      int levelIdx = -1;
-      int timeIdx = -1;
+      int nameIndex = -1;
+      int continentIndex = -1;
+      int scoreIndex = -1;
+      int collectablesIndex = -1;
+      int levelIndex = -1;
+      int timeIndex = -1;
 
       for (int i = 0; i < headers.length; i++) {
-        String h = headers[i].trim();
-        if (h.equals("name")) nameIdx = i;
-        else if (h.equals("continent")) continentIdx = i;
-        else if (h.equals("score")) scoreIdx = i;
-        else if (h.equals("collectables")) collectablesIdx = i;
-        else if (h.equals("level")) levelIdx = i;
-        else if (h.equals("completion_time")) timeIdx = i;
+        String col = headers[i].trim();
+        if (col.equals("name")) nameIndex = i;
+        else if (col.equals("continent")) continentIndex = i;
+        else if (col.equals("score")) scoreIndex = i;
+        else if (col.equals("collectables")) collectablesIndex = i;
+        else if (col.equals("level")) levelIndex = i;
+        else if (col.equals("completion_time")) timeIndex = i;
       }
 
       while (scan.hasNextLine()) {
@@ -50,16 +50,15 @@ public class Backend implements BackendInterface {
         if (line.isEmpty()) continue;
         String[] cols = line.split(",");
 
-        String name = cols[nameIdx].trim();
-        GameRecord.Continent location = GameRecord.Continent.valueOf(cols[continentIdx].trim());
-        int score = Integer.parseInt(cols[scoreIdx].trim());
-        int collectables = Integer.parseInt(cols[collectablesIdx].trim());
-        int level = Integer.parseInt(cols[levelIdx].trim());
-        String completionTime = cols[timeIdx].trim();
+        // build the GameRecord
+        String name = cols[nameIndex].trim();
+        GameRecord.Continent location = GameRecord.Continent.valueOf(cols[continentIndex].trim());
+        int score = Integer.parseInt(cols[scoreIndex].trim());
+        int collectables = Integer.parseInt(cols[collectablesIndex].trim());
+        int level = Integer.parseInt(cols[levelIndex].trim());
+        String completionTime = cols[timeIndex].trim();
 
-        GameRecord record =
-            new GameRecord(name, location, score, collectables, level, completionTime);
-        addRecord(record);
+        addRecord(new GameRecord(name, location, score, collectables, level, completionTime));
       }
     }
   }
@@ -81,26 +80,11 @@ public class Backend implements BackendInterface {
   public List<String> getTopTen() {
     List<GameRecord> records = getFilteredGameRecords();
     records.sort((r1, r2) -> Integer.compare(r2.getCollectables(), r1.getCollectables()));
-    List<String> topTenNames = new ArrayList<>();
-    int limit = Math.min(10, records.size());
-    for (int i = 0; i < limit; i++) {
-      topTenNames.add(records.get(i).getName());
+    List<String> result = new ArrayList<>();
+    for (int i = 0; i < Math.min(10, records.size()); i++) {
+      result.add(records.get(i).getName());
     }
-    return topTenNames;
-  }
-
-  long timeToSeconds(String timeStr) {
-    if (timeStr == null || timeStr.trim().isEmpty()) return -1;
-    String[] parts = timeStr.trim().split(":");
-    if (parts.length != 3) return -1;
-    try {
-      long h = Long.parseLong(parts[0]);
-      long m = Long.parseLong(parts[1]);
-      long s = Long.parseLong(parts[2]);
-      return h * 3600 + m * 60 + s;
-    } catch (NumberFormatException e) {
-      return -1;
-    }
+    return result;
   }
 
   List<GameRecord> getFilteredGameRecords() {
@@ -117,16 +101,12 @@ public class Backend implements BackendInterface {
     }
 
     List<GameRecord> records = new ArrayList<>();
-    long filterSec = timeToSeconds(this.filterTime);
 
     for (GameRecord record : this.tree) {
       if (record == null) continue;
       if (this.low != null && record.getLevel() < this.low) continue;
       if (this.high != null && record.getLevel() > this.high) continue;
-      if (filterSec >= 0) {
-        long recSec = timeToSeconds(record.getCompletionTime());
-        if (recSec < 0 || recSec >= filterSec) continue;
-      }
+      if (!record.getCompletionTime().equals(this.filterTime)) continue;
       records.add(record);
     }
     return records;

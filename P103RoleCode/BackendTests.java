@@ -1,12 +1,11 @@
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.io.IOException;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 
 /**
- * BackendTests - JUnit 5 tests for testing the functionality of the Backend class
- * in combination with the Tree_Placeholder.
+ * BackendTests - JUnit 5 tests for testing the functionality of the Backend class in combination
+ * with the Tree_Placeholder.
  */
 public class BackendTests {
 
@@ -28,7 +27,8 @@ public class BackendTests {
     assertEquals(newRecord, tree.lastAddedGameRecord);
 
     // Call 2: getAndSetRange (range 300 to 480)
-    // Placeholder has: speedRoyalty (479), xXxgamer47xXx (493), v0idt3mp0 (353), plus testHero (450)
+    // Placeholder has: speedRoyalty (479), xXxgamer47xXx (493), v0idt3mp0 (353), plus testHero
+    // (450)
     List<String> rangeNames = backend.getAndSetRange(300, 480);
     assertNotNull(rangeNames);
     assertTrue(rangeNames.contains("v0idt3mp0"), "v0idt3mp0 (level 353) should be in range");
