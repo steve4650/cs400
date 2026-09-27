@@ -123,7 +123,9 @@ public class BSTRotation<T extends Comparable<T>> extends BinarySearchTree<T> {
       child.setLeft(parent);
       parent.setUp(child);
       parent.setRight(b);
-      b.setUp(parent);
+      if (b != null) {
+        b.setUp(parent);
+      }
     }
   }
 
@@ -142,6 +144,11 @@ public class BSTRotation<T extends Comparable<T>> extends BinarySearchTree<T> {
     result = testRotation.test3();
     if (!result) {
       System.out.println("failed test3");
+      return;
+    }
+    result = testRotation.test4();
+    if (!result) {
+      System.out.println("failed test4");
       return;
     }
     System.out.println("passed everything");
@@ -286,6 +293,29 @@ public class BSTRotation<T extends Comparable<T>> extends BinarySearchTree<T> {
         && stringTree.root.downLeft().downRight().getEntry() == "yoe"
         && stringTree.root.downLeft().downRight().downLeft().getEntry() == "xoe"
         && stringTree.root.downLeft().downRight().downLeft().downLeft().getEntry() == "voe")) {
+      return false;
+    }
+    return true;
+  }
+
+  /**
+   * Test a left rotation of non-root nodes where the node being rotated up has no left child, so
+   * there is no inner subtree to reattach.
+   *
+   * @return whether or not the test passes
+   */
+  public boolean test4() {
+    BSTRotation<Integer> intTree = new BSTRotation<Integer>();
+    intTree.add(4);
+    intTree.add(2);
+    intTree.add(1);
+    intTree.add(3);
+    intTree.add(6);
+    intTree.add(5);
+    intTree.add(7);
+    // left rotation of 3 over 2, neither of which is the root
+    intTree.rotate(intTree.root.downLeft().downRight(), intTree.root.downLeft());
+    if (!intTree.root.toLevelOrderString().equals("[ 4, 3, 6, 2, 5, 7, 1 ]")) {
       return false;
     }
     return true;
