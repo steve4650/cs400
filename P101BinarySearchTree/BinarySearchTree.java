@@ -8,6 +8,9 @@ public class BinarySearchTree<T extends Comparable<T>> implements SortedCollecti
   public BinarySearchTree() {}
 
   public void add(T data) throws NullPointerException {
+    if (data == null) {
+      throw new NullPointerException("You gave me null data!");
+    }
     BinaryNode<T> newNode = new BinaryNode<T>(data);
     if (this.root == null) {
       this.root = newNode;
