@@ -19,30 +19,47 @@ public class RedBlackTree<T extends Comparable<T>> extends BSTRotation<T> {
       newNode.flipColor();
       return;
     }
-    if (newNode.up().isBlackNode()) {
-      return;
-    }
+
     RedBlackNode<T> p = newNode.up();
     RedBlackNode<T> g = p.up();
+
+    if (p.isBlackNode()) {
+      return;
+    }
+
+    RedBlackNode<T> aunt;
+    if (p.isRightChild()) {
+      aunt = p.downLeft();
+    } else {
+      aunt = p.downRight();
+    }
+
+    // red aunt
+    if ((aunt != null) && (!aunt.isBlackNode())) {
+      p.flipColor();
+      aunt.flipColor();
+      if (g != this.root) {
+        g.flipColor();
+      }
+    }
+
+    // else: black aunt
     /*
      * https://pages.cs.wisc.edu/~cs400/readings/Red-Black-Trees/
      */
     if (!p.isRightChild()) {
-      RedBlackNode<T> aunt = g.downRight();
-      if (aunt == null || aunt.isBlackNode()) {
-        // Case 2A: K right child of P left child of G, and S is black
-        if (newNode.isRightChild()) {
-          this.rotate(newNode, p);
-          this.rotate(newNode, g);
-          newNode.flipColor();
-          g.flipColor();
-        }
-        // Case 2A: K left child of P left child of G, and S is black
-        else {
-          this.rotate(p, g);
-          p.flipColor();
-          g.flipColor();
-        }
+      // Case 2A: K right child of P left child of G, and S is black
+      if (newNode.isRightChild()) {
+        this.rotate(newNode, p);
+        this.rotate(newNode, g);
+        newNode.flipColor();
+        g.flipColor();
+      }
+      // Case 2A: K left child of P left child of G, and S is black
+      else {
+        this.rotate(p, g);
+        p.flipColor();
+        g.flipColor();
       }
     } else if (p.isRightChild()) {
       // Case 2A: K left child of P right child of G, and S is black
