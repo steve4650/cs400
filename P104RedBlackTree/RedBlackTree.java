@@ -2,8 +2,6 @@ package P104RedBlackTree;
 
 public class RedBlackTree<T extends Comparable<T>> extends BSTRotation<T> {
 
-  protected RedBlackNode<T> root = null;
-
   /**
    * Checks if a new red node in the RedBlackTree causes a red property violation by having a red
    * parent. If this is not the case, the method terminates without making any changes to the tree.
@@ -17,7 +15,50 @@ public class RedBlackTree<T extends Comparable<T>> extends BSTRotation<T> {
    * @param newNode a newly inserted red node, or a node turned red by previous repair
    */
   protected void ensureRedProperty(RedBlackNode<T> newNode) {
-    // TODO: Implement this method.
+    if (this.root == newNode && (!newNode.isBlackNode())) {
+      newNode.flipColor();
+      return;
+    }
+    if (newNode.up().isBlackNode()) {
+      return;
+    }
+    RedBlackNode<T> p = newNode.up();
+    RedBlackNode<T> g = p.up();
+    /*
+     * https://pages.cs.wisc.edu/~cs400/readings/Red-Black-Trees/
+     */
+    if (!p.isRightChild()) {
+      RedBlackNode<T> aunt = g.downRight();
+      if (aunt == null || aunt.isBlackNode()) {
+        // Case 2A: K right child of P left child of G, and S is black
+        if (newNode.isRightChild()) {
+          this.rotate(newNode, p);
+          this.rotate(newNode, g);
+          newNode.flipColor();
+          g.flipColor();
+        }
+        // Case 2A: K left child of P left child of G, and S is black
+        else {
+          this.rotate(p, g);
+          p.flipColor();
+          g.flipColor();
+        }
+      }
+    } else if (p.isRightChild()) {
+      // Case 2A: K left child of P right child of G, and S is black
+      if (!newNode.isRightChild()) {
+        this.rotate(newNode, p);
+        this.rotate(newNode, g);
+        newNode.flipColor();
+        g.flipColor();
+      }
+      // Case 2A: K right child of P right child of G, and S is black
+      else {
+        this.rotate(p, g);
+        p.flipColor();
+        g.flipColor();
+      }
+    }
   }
 
   @Override
@@ -35,5 +76,6 @@ public class RedBlackTree<T extends Comparable<T>> extends BSTRotation<T> {
       newNode.flipColor();
     }
     ensureRedProperty(newNode);
+    // TODO: set root to black?
   }
 }
