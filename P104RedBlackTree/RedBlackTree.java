@@ -1,6 +1,9 @@
-package P104RedBlackTree;
-
 public class RedBlackTree<T extends Comparable<T>> extends BSTRotation<T> {
+
+  /** Explicit no-argument constructor. */
+  public RedBlackTree() {
+    super();
+  }
 
   /**
    * Checks if a new red node in the RedBlackTree causes a red property violation by having a red
@@ -15,84 +18,93 @@ public class RedBlackTree<T extends Comparable<T>> extends BSTRotation<T> {
    * @param newNode a newly inserted red node, or a node turned red by previous repair
    */
   protected void ensureRedProperty(RedBlackNode<T> newNode) {
-    if (this.root == newNode && (!newNode.isBlackNode())) {
-      newNode.flipColor();
+    if (newNode == null) {
       return;
     }
 
-    RedBlackNode<T> p = newNode.up();
-    RedBlackNode<T> g = p.up();
-
-    if (p.isBlackNode()) {
+    RedBlackNode<T> parent = newNode.up();
+    // If there is no parent or the parent is black, there is no red property violation.
+    if (parent == null || parent.isBlackNode()) {
       return;
     }
 
-    RedBlackNode<T> aunt;
-    if (p.isRightChild()) {
-      aunt = p.downLeft();
+    // Since parent is red, parent cannot be the root (root is always black).
+    // Thus, grandparent must exist.
+    RedBlackNode<T> grandparent = parent.up();
+    if (grandparent == null) {
+      return;
+    }
+
+    // Determine the aunt (sibling of parent)
+    boolean isParentRightChild = parent.isRightChild();
+    RedBlackNode<T> aunt = isParentRightChild ? grandparent.downLeft() : grandparent.downRight();
+
+    // Case 1: Aunt is RED
+    if (aunt != null && !aunt.isBlackNode()) {
+      parent.isBlackNode = true;
+      aunt.isBlackNode = true;
+      grandparent.isBlackNode = false;
+      // Recurse on grandparent to repair potential red property violation higher up
+      ensureRedProperty(grandparent);
     } else {
-      aunt = p.downRight();
-    }
+      // Case 2: Aunt is BLACK (or null)
+      boolean isNodeRightChild = newNode.isRightChild();
 
-    // red aunt
-    if ((aunt != null) && (!aunt.isBlackNode())) {
-      p.flipColor();
-      aunt.flipColor();
-      if (g != this.root) {
-        g.flipColor();
-      }
-    }
-
-    // else: black aunt
-    /*
-     * https://pages.cs.wisc.edu/~cs400/readings/Red-Black-Trees/
-     */
-    if (!p.isRightChild()) {
-      // Case 2A: K right child of P left child of G, and S is black
-      if (newNode.isRightChild()) {
-        this.rotate(newNode, p);
-        this.rotate(newNode, g);
-        newNode.flipColor();
-        g.flipColor();
-      }
-      // Case 2A: K left child of P left child of G, and S is black
-      else {
-        this.rotate(p, g);
-        p.flipColor();
-        g.flipColor();
-      }
-    } else if (p.isRightChild()) {
-      // Case 2A: K left child of P right child of G, and S is black
-      if (!newNode.isRightChild()) {
-        this.rotate(newNode, p);
-        this.rotate(newNode, g);
-        newNode.flipColor();
-        g.flipColor();
-      }
-      // Case 2A: K right child of P right child of G, and S is black
-      else {
-        this.rotate(p, g);
-        p.flipColor();
-        g.flipColor();
+      if (!isParentRightChild) {
+        // Parent is left child of grandparent
+        if (isNodeRightChild) {
+          // Case 2a: Left-Right (LR) - double rotation
+          rotate(newNode, parent);
+          rotate(newNode, grandparent);
+          newNode.isBlackNode = true;
+          grandparent.isBlackNode = false;
+        } else {
+          // Case 2b: Left-Left (LL) - single rotation
+          rotate(parent, grandparent);
+          parent.isBlackNode = true;
+          grandparent.isBlackNode = false;
+        }
+      } else {
+        // Parent is right child of grandparent
+        if (!isNodeRightChild) {
+          // Case 2c: Right-Left (RL) - double rotation
+          rotate(newNode, parent);
+          rotate(newNode, grandparent);
+          newNode.isBlackNode = true;
+          grandparent.isBlackNode = false;
+        } else {
+          // Case 2d: Right-Right (RR) - single rotation
+          rotate(parent, grandparent);
+          parent.isBlackNode = true;
+          grandparent.isBlackNode = false;
+        }
       }
     }
   }
 
+  /**
+   * Overrides the add method inherited from BinarySearchTree. Inserts a new element into the
+   * Red-Black Tree while maintaining Red-Black Tree properties.
+   *
+   * @param data the item to be inserted into the tree
+   * @throws NullPointerException if data is null
+   */
   @Override
   public void add(T data) throws NullPointerException {
     if (data == null) {
-      throw new NullPointerException("Null data! Throwing!");
+      throw new NullPointerException("Cannot insert null data into RedBlackTree.");
     }
-    RedBlackNode<T> newNode = new RedBlackNode<T>(data);
+
+    RedBlackNode<T> newNode = new RedBlackNode<>(data);
+
     if (this.root == null) {
       this.root = newNode;
-      return;
+    } else {
+      addHelper(newNode, this.root);
+      ensureRedProperty(newNode);
     }
-    addHelper(newNode, this.root);
-    if (newNode.isBlackNode()) {
-      newNode.flipColor();
-    }
-    ensureRedProperty(newNode);
-    // TODO: set root to black?
+
+    // Ensure that the root node is always black after insertion and repairs
+    ((RedBlackNode<T>) this.root).isBlackNode = true;
   }
 }

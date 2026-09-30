@@ -123,7 +123,9 @@ public class BSTRotation<T extends Comparable<T>> extends BinarySearchTree<T> {
       child.setLeft(parent);
       parent.setUp(child);
       parent.setRight(b);
-      b.setUp(parent);
+      if (b != null) {
+        b.setUp(parent);
+      }
     }
   }
 
