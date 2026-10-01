@@ -83,7 +83,7 @@ public class RedBlackTree<T extends Comparable<T>> extends BSTRotation<T> {
     RedBlackNode<T> newNode = new RedBlackNode<T>(data);
     if (this.root == null) {
       this.root = newNode;
-      if(!newNode.isBlackNode()) {
+      if (!newNode.isBlackNode()) {
         newNode.flipColor();
       }
       return;
