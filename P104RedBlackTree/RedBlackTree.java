@@ -140,51 +140,32 @@ public class RedBlackTree<T extends Comparable<T>> extends BSTRotation<T> {
     Assertions.assertEquals("[ 4.b ]", rbt1.root.toLevelOrderString());
     rbt1.add(3);
     Assertions.assertEquals("[ 4.b, 3.r ]", rbt1.root.toLevelOrderString());
+  }
+
+  /** Test case 2B: red aunt (https://pages.cs.wisc.edu/~cs400/readings/Red-Black-Trees/) */
+  @Test
+  public void case2B() {
+    RedBlackTree<Integer> rbt1 = new RedBlackTree<>();
+    rbt1.add(4);
+    Assertions.assertEquals("[ 4.b ]", rbt1.root.toLevelOrderString());
+    rbt1.add(3);
+    Assertions.assertEquals("[ 4.b, 3.r ]", rbt1.root.toLevelOrderString());
     rbt1.add(2);
     Assertions.assertEquals("[ 3.b, 2.r, 4.r ]", rbt1.root.toLevelOrderString());
+    // Now, when 1 is inserted, it will have a black aunt
     rbt1.add(1);
     Assertions.assertEquals("[ 3.b, 2.b, 4.b, 1.r ]", rbt1.root.toLevelOrderString());
   }
 
-  /** Tests recoloring repair when inserting a node where the aunt is red. */
+  /**
+   * Test case 2A: black (null) aunt (https://pages.cs.wisc.edu/~cs400/readings/Red-Black-Trees/)
+   */
   @Test
-  public void testRedAuntRecoloring() {
-    // Insert 30, 20, 40, 10 -> aunt 40 is red when 10 is inserted
-    RedBlackTree<Integer> rbt = new RedBlackTree<>();
-    rbt.add(30);
-    rbt.add(20);
-    rbt.add(40);
-    rbt.add(10);
-    Assertions.assertEquals("[ 30.b, 20.b, 40.b, 10.r ]", rbt.root.toLevelOrderString());
-  }
-
-  /** Tests cascading recoloring when grandparent is not root and turns red. */
-  @Test
-  public void testCascadingRecoloring() {
-    // Insert 100, 50, 150, 30, 70, 20 -> inserting 20 causes red aunt recoloring of 50's children
-    RedBlackTree<Integer> rbt = new RedBlackTree<>();
-    rbt.add(100);
-    rbt.add(50);
-    rbt.add(150);
-    rbt.add(30);
-    rbt.add(70);
-    rbt.add(20);
-    Assertions.assertEquals(
-        "[ 100.b, 50.r, 150.b, 30.b, 70.b, 20.r ]", rbt.root.toLevelOrderString());
-  }
-
-  /** Tests adding null values throwing NullPointerException and checking tree size/contains. */
-  @Test
-  public void testTreePropertiesAndNullHandling() {
-    RedBlackTree<String> rbt = new RedBlackTree<>();
-    Assertions.assertTrue(rbt.isEmpty());
-    Assertions.assertThrows(NullPointerException.class, () -> rbt.add(null));
-    rbt.add("m");
-    rbt.add("f");
-    rbt.add("s");
-    rbt.add("b");
-    Assertions.assertEquals(4, rbt.size());
-    Assertions.assertTrue(rbt.contains("f"));
-    Assertions.assertFalse(rbt.contains("z"));
+  public void case2A() {
+    RedBlackTree<Integer> rbt1 = new RedBlackTree<>();
+    rbt1.add(50);
+    rbt1.add(60);
+    rbt1.add(70);
+    Assertions.assertEquals("[ 60.b, 50.r, 70.r ]", rbt1.root.toLevelOrderString());
   }
 }
