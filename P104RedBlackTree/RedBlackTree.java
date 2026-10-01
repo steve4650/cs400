@@ -130,9 +130,8 @@ public class RedBlackTree<T extends Comparable<T>> extends BSTRotation<T> {
   }
 
   /**
-   * Test case 1 of https://pages.cs.wisc.edu/~cs400/readings/Red-Black-Trees/
-   * specifically, that a new red child of a black node is red. 
-   * 
+   * Test case 1 of https://pages.cs.wisc.edu/~cs400/readings/Red-Black-Trees/ specifically, that a
+   * new red child of a black node is red.
    */
   @Test
   public void case1() {
@@ -145,7 +144,6 @@ public class RedBlackTree<T extends Comparable<T>> extends BSTRotation<T> {
     Assertions.assertEquals("[ 3.b, 2.r, 4.r ]", rbt1.root.toLevelOrderString());
     rbt1.add(1);
     Assertions.assertEquals("[ 3.b, 2.b, 4.b, 1.r ]", rbt1.root.toLevelOrderString());
-
   }
 
   /** Tests recoloring repair when inserting a node where the aunt is red. */
