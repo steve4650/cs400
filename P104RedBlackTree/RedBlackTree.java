@@ -20,60 +20,57 @@ public class RedBlackTree<T extends Comparable<T>> extends BSTRotation<T> {
       return;
     }
 
-    RedBlackNode<T> p = newNode.up();
-    RedBlackNode<T> g = p.up();
+    RedBlackNode<T> parent = newNode.up();
+    RedBlackNode<T> grandparent = parent.up();
 
-    if (p.isBlackNode()) {
+    if (parent.isBlackNode()) {
       return;
     }
 
     RedBlackNode<T> aunt;
-    if (p.isRightChild()) {
-      aunt = p.downLeft();
+    if (parent.isRightChild()) {
+      aunt = parent.downLeft();
     } else {
-      aunt = p.downRight();
+      aunt = parent.downRight();
     }
 
-    // red aunt
+    // Case 2B: red aunt. (https://pages.cs.wisc.edu/~cs400/readings/Red-Black-Trees/)
     if ((aunt != null) && (!aunt.isBlackNode())) {
-      p.flipColor();
+      parent.flipColor();
       aunt.flipColor();
-      if (g != this.root) {
-        g.flipColor();
+      if (grandparent != this.root) {
+        grandparent.flipColor();
       }
     }
 
-    // else: black aunt
-    /*
-     * https://pages.cs.wisc.edu/~cs400/readings/Red-Black-Trees/
-     */
-    if (!p.isRightChild()) {
-      // Case 2A: K right child of P left child of G, and S is black
+    // Case 2A: black aunt. (https://pages.cs.wisc.edu/~cs400/readings/Red-Black-Trees/)
+    if (!parent.isRightChild()) {
+      // Subcase: K right child of P left child of G, and S is black
       if (newNode.isRightChild()) {
-        this.rotate(newNode, p);
-        this.rotate(newNode, g);
+        this.rotate(newNode, parent);
+        this.rotate(newNode, grandparent);
         newNode.flipColor();
-        g.flipColor();
+        grandparent.flipColor();
       }
-      // Case 2A: K left child of P left child of G, and S is black
+      // Subcase: K left child of P left child of G, and S is black
       else {
-        this.rotate(p, g);
-        p.flipColor();
-        g.flipColor();
+        this.rotate(parent, grandparent);
+        parent.flipColor();
+        grandparent.flipColor();
       }
-    } else if (p.isRightChild()) {
-      // Case 2A: K left child of P right child of G, and S is black
+    } else if (parent.isRightChild()) {
+      // Subcase: K left child of P right child of G, and S is black
       if (!newNode.isRightChild()) {
-        this.rotate(newNode, p);
-        this.rotate(newNode, g);
+        this.rotate(newNode, parent);
+        this.rotate(newNode, grandparent);
         newNode.flipColor();
-        g.flipColor();
+        grandparent.flipColor();
       }
-      // Case 2A: K right child of P right child of G, and S is black
+      // Subcase: K right child of P right child of G, and S is black
       else {
-        this.rotate(p, g);
-        p.flipColor();
-        g.flipColor();
+        this.rotate(parent, grandparent);
+        parent.flipColor();
+        grandparent.flipColor();
       }
     }
   }
@@ -86,6 +83,9 @@ public class RedBlackTree<T extends Comparable<T>> extends BSTRotation<T> {
     RedBlackNode<T> newNode = new RedBlackNode<T>(data);
     if (this.root == null) {
       this.root = newNode;
+      if(!newNode.isBlackNode()) {
+        newNode.flipColor();
+      }
       return;
     }
     addHelper(newNode, this.root);
@@ -93,6 +93,5 @@ public class RedBlackTree<T extends Comparable<T>> extends BSTRotation<T> {
       newNode.flipColor();
     }
     ensureRedProperty(newNode);
-    // TODO: set root to black?
   }
 }
