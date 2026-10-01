@@ -24,59 +24,56 @@ public class RedBlackTree<T extends Comparable<T>> extends BSTRotation<T> {
     }
 
     RedBlackNode<T> parent = newNode.up();
-    RedBlackNode<T> grandparent = parent.up();
+    if (parent == null || parent.isBlackNode()) {
+      return;
+    }
 
-    // Case: grandparent is null
-    // In this case, there can be no red-red violation (since parent must be the root, which is
-    // black)
+    RedBlackNode<T> grandparent = parent.up();
     if (grandparent == null) {
       return;
     }
 
-    if (parent.isBlackNode()) {
+    RedBlackNode<T> aunt = parent.isRightChild() ? grandparent.downLeft() : grandparent.downRight();
+
+    // Case 2B: red aunt
+    if (aunt != null && !aunt.isBlackNode()) {
+      parent.flipColor();
+      aunt.flipColor();
+      if (grandparent == this.root) {
+        if (!grandparent.isBlackNode()) {
+          grandparent.flipColor();
+        }
+      } else {
+        grandparent.flipColor();
+        ensureRedProperty(grandparent);
+      }
       return;
     }
 
-    RedBlackNode<T> aunt;
-    if (parent.isRightChild()) {
-      aunt = parent.downLeft();
-    } else {
-      aunt = parent.downRight();
-    }
-
-    // Case 2B: red aunt. (https://pages.cs.wisc.edu/~cs400/readings/Red-Black-Trees/)
-    if ((aunt != null) && (!aunt.isBlackNode())) {
-      parent.flipColor();
-      aunt.flipColor();
-      if (grandparent != this.root) {
-        grandparent.flipColor();
-      }
-    }
-
-    // Case 2A: black aunt. (https://pages.cs.wisc.edu/~cs400/readings/Red-Black-Trees/)
+    // Case 2A: black aunt
     if (!parent.isRightChild()) {
-      // Subcase: K right child of P left child of G, and S is black
+      // Subcase: K right child of P left child of G, and S is black (Left-Right)
       if (newNode.isRightChild()) {
         this.rotate(newNode, parent);
         this.rotate(newNode, grandparent);
         newNode.flipColor();
         grandparent.flipColor();
       }
-      // Subcase: K left child of P left child of G, and S is black
+      // Subcase: K left child of P left child of G, and S is black (Left-Left)
       else {
         this.rotate(parent, grandparent);
         parent.flipColor();
         grandparent.flipColor();
       }
-    } else if (parent.isRightChild()) {
-      // Subcase: K left child of P right child of G, and S is black
+    } else {
+      // Subcase: K left child of P right child of G, and S is black (Right-Left)
       if (!newNode.isRightChild()) {
         this.rotate(newNode, parent);
         this.rotate(newNode, grandparent);
         newNode.flipColor();
         grandparent.flipColor();
       }
-      // Subcase: K right child of P right child of G, and S is black
+      // Subcase: K right child of P right child of G, and S is black (Right-Right)
       else {
         this.rotate(parent, grandparent);
         parent.flipColor();
@@ -112,12 +109,84 @@ public class RedBlackTree<T extends Comparable<T>> extends BSTRotation<T> {
   }
 
   /**
-   * roleTest2 tests the size of the values of filtered slices of the dummy data returned by
-   * Tree_Placeholder.
+   * Tests single rotation insertion when inserting nodes causing line violations with a black/null
+   * aunt.
    */
   @Test
-  public void test1() {
-    RedBlackTree<Integer> rbt = new RedBlackTree<Integer>();
-    Assertions.assertTrue(true);
+  public void testRedBlackNodeInsertionLine() {
+    // Left-Left Line violation: insert 30, 20, 10
+    RedBlackTree<Integer> rbt1 = new RedBlackTree<>();
+    rbt1.add(30);
+    rbt1.add(20);
+    rbt1.add(10);
+    Assertions.assertEquals("[ 20.b, 10.r, 30.r ]", rbt1.root.toLevelOrderString());
+
+    // Right-Right Line violation: insert 30, 40, 50
+    RedBlackTree<Integer> rbt2 = new RedBlackTree<>();
+    rbt2.add(30);
+    rbt2.add(40);
+    rbt2.add(50);
+    Assertions.assertEquals("[ 40.b, 30.r, 50.r ]", rbt2.root.toLevelOrderString());
+  }
+
+  /**
+   * Test case 1 of https://pages.cs.wisc.edu/~cs400/readings/Red-Black-Trees/
+   * specifically, that a new red child of a black node is red. 
+   * 
+   */
+  @Test
+  public void case1() {
+    RedBlackTree<Integer> rbt1 = new RedBlackTree<>();
+    rbt1.add(4);
+    Assertions.assertEquals("[ 4.b ]", rbt1.root.toLevelOrderString());
+    rbt1.add(3);
+    Assertions.assertEquals("[ 4.b, 3.r ]", rbt1.root.toLevelOrderString());
+    rbt1.add(2);
+    Assertions.assertEquals("[ 3.b, 2.r, 4.r ]", rbt1.root.toLevelOrderString());
+    rbt1.add(1);
+    Assertions.assertEquals("[ 3.b, 2.b, 4.b, 1.r ]", rbt1.root.toLevelOrderString());
+
+  }
+
+  /** Tests recoloring repair when inserting a node where the aunt is red. */
+  @Test
+  public void testRedAuntRecoloring() {
+    // Insert 30, 20, 40, 10 -> aunt 40 is red when 10 is inserted
+    RedBlackTree<Integer> rbt = new RedBlackTree<>();
+    rbt.add(30);
+    rbt.add(20);
+    rbt.add(40);
+    rbt.add(10);
+    Assertions.assertEquals("[ 30.b, 20.b, 40.b, 10.r ]", rbt.root.toLevelOrderString());
+  }
+
+  /** Tests cascading recoloring when grandparent is not root and turns red. */
+  @Test
+  public void testCascadingRecoloring() {
+    // Insert 100, 50, 150, 30, 70, 20 -> inserting 20 causes red aunt recoloring of 50's children
+    RedBlackTree<Integer> rbt = new RedBlackTree<>();
+    rbt.add(100);
+    rbt.add(50);
+    rbt.add(150);
+    rbt.add(30);
+    rbt.add(70);
+    rbt.add(20);
+    Assertions.assertEquals(
+        "[ 100.b, 50.r, 150.b, 30.b, 70.b, 20.r ]", rbt.root.toLevelOrderString());
+  }
+
+  /** Tests adding null values throwing NullPointerException and checking tree size/contains. */
+  @Test
+  public void testTreePropertiesAndNullHandling() {
+    RedBlackTree<String> rbt = new RedBlackTree<>();
+    Assertions.assertTrue(rbt.isEmpty());
+    Assertions.assertThrows(NullPointerException.class, () -> rbt.add(null));
+    rbt.add("m");
+    rbt.add("f");
+    rbt.add("s");
+    rbt.add("b");
+    Assertions.assertEquals(4, rbt.size());
+    Assertions.assertTrue(rbt.contains("f"));
+    Assertions.assertFalse(rbt.contains("z"));
   }
 }
