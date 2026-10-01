@@ -15,13 +15,22 @@ public class RedBlackTree<T extends Comparable<T>> extends BSTRotation<T> {
    * @param newNode a newly inserted red node, or a node turned red by previous repair
    */
   protected void ensureRedProperty(RedBlackNode<T> newNode) {
-    if (this.root == newNode && (!newNode.isBlackNode())) {
-      newNode.flipColor();
+    if (this.root == newNode) {
+      if (!newNode.isBlackNode()) {
+        newNode.flipColor();
+      }
       return;
     }
 
     RedBlackNode<T> parent = newNode.up();
     RedBlackNode<T> grandparent = parent.up();
+
+    // Case: grandparent is null
+    // In this case, there can be no red-red violation (since parent must be the root, which is
+    // black)
+    if (grandparent == null) {
+      return;
+    }
 
     if (parent.isBlackNode()) {
       return;
@@ -75,6 +84,12 @@ public class RedBlackTree<T extends Comparable<T>> extends BSTRotation<T> {
     }
   }
 
+  /*
+   * Override the BSTRotation implementation, but also call ensureRedProperty to ensure the RB-tree red property
+   * remains after insertion.
+   *
+   * @param data Data point to add to the tree
+   */
   @Override
   public void add(T data) throws NullPointerException {
     if (data == null) {
