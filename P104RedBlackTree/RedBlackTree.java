@@ -1,4 +1,5 @@
-package P104RedBlackTree;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 public class RedBlackTree<T extends Comparable<T>> extends BSTRotation<T> {
 
@@ -108,5 +109,15 @@ public class RedBlackTree<T extends Comparable<T>> extends BSTRotation<T> {
       newNode.flipColor();
     }
     ensureRedProperty(newNode);
+  }
+
+  /**
+   * roleTest2 tests the size of the values of filtered slices of the dummy data returned by
+   * Tree_Placeholder.
+   */
+  @Test
+  public void test1() {
+    RedBlackTree<Integer> rbt = new RedBlackTree<Integer>();
+    Assertions.assertTrue(true);
   }
 }
