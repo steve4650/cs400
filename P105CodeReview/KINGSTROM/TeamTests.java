@@ -4,6 +4,9 @@ import org.junit.jupiter.api.Test;
 
 public class TeamTests {
 
+  /*
+   * Test that running `quit` successfully exits the CLI interface. Uses TextUITester as a dependency.
+   */
   @Test
   void testRunCommandLoop1() {
     IterableSortedCollection<GameRecord> tree = new Tree_Placeholder();
@@ -18,6 +21,10 @@ public class TeamTests {
     Assertions.assertTrue(true);
   }
 
+  /*
+   * Test that running `help` successfully prints something that documents the "submit" command
+   * (minimally, by checking that "submit" is in stdout from the command results.)
+   */
   @Test
   void testShowCommandInstructions1() {
     IterableSortedCollection<GameRecord> tree = new Tree_Placeholder();
@@ -31,6 +38,9 @@ public class TeamTests {
     Assertions.assertTrue(result.contains("submit"));
   }
 
+  /*
+   * Test that an error message is printed when an invalid command `helpo` is run.`
+   */
   @Test
   void testProcessSingleCommand1() {
     IterableSortedCollection<GameRecord> tree = new Tree_Placeholder();
