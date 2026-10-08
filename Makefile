@@ -12,6 +12,7 @@ run:
 	cd P103RoleCode && javac -cp .:../junit5.jar *.java && java -jar ../junit5.jar -cp . -c BackendTests
 	cd P104RedBlackTree && javac -cp .:../junit5.jar *.java && java -jar ../junit5.jar -cp . -c RedBlackTree
 	cd P105CodeReview/DGRAHAM23 && javac -cp .:../../junit5.jar *.java && java -jar ../../junit5.jar -cp . -c TeamTests
+	cd P105CodeReview/GJFRANCIS && javac -cp .:../../junit5.jar *.java && java -jar ../../junit5.jar -cp . -c TeamTests
 
 clean:
 	mkdir -p /tmp/cs400/01

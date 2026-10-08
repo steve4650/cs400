@@ -1,118 +1,116 @@
-import java.io.OutputStream;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
-import java.io.PrintStream;
 import java.io.IOException;
-import java.util.Scanner;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.PrintStream;
 
-/** 
- * This class can be used to test text based user interactions by 1) specifying
- * a String of text input (that will be fed to System.in as if entered by the
- * user), and then 2) capturing the output printed to System.out and
- * System.err in String form so that it can be compared to the expected output.
+/**
+ * This class can be used to test text based user interactions by 1) specifying a String of text
+ * input (that will be fed to System.in as if entered by the user), and then 2) capturing the output
+ * printed to System.out and System.err in String form so that it can be compared to the expected
+ * output.
+ *
  * @date 2026.09
  */
 public class TextUITester {
-	
-	// save initial stream refernces
-	private PrintStream saveSystemOut;
-	private PrintStream saveSystemErr;
-	private InputStream saveSystemIn;
-	// streams to use in place of those standard ones
-	private ByteArrayOutputStream redirectedOut;
-	private ByteArrayOutputStream redirectedErr;
 
-	private boolean hideOutput;
+  // save initial stream refernces
+  private PrintStream saveSystemOut;
+  private PrintStream saveSystemErr;
+  private InputStream saveSystemIn;
+  // streams to use in place of those standard ones
+  private ByteArrayOutputStream redirectedOut;
+  private ByteArrayOutputStream redirectedErr;
 
-	/**
-	 * Creates a new test object with the specified string of simulated user
-	 * input text. The output printed to System.out will be hidden, if true
-	 * is passed for the second argument. This can be helpfule to change while
-	 * debugging a failing test.
-	 * @param programInput the Strin of text that you want to simulate being
-	 *        typed in by the user.
-	 * @param hindeOutput determines whether this test's output is hidden from
-	 *        System.out while the test is running.
-	 */
-	public TextUITester(String programInput, boolean hidelOutput) {
-		// backup standard io before redirecting for tests
-		this.saveSystemOut = System.out;
-		this.saveSystemErr = System.err;
-		this.saveSystemIn = System.in;
-		this.hideOutput = hideOutput;
+  private boolean hideOutput;
 
-		//create alternative location to write output, and to read input from
-		this.redirectedOut = new ByteArrayOutputStream();
-		if (hideOutput) {
-			System.setOut(new PrintStream(this.redirectedOut));
-		} else {
-			this.saveSystemOut.println("TextUITester's capture starts:");
-			System.setOut(new PrintStream(new SplitStream(
-				this.saveSystemOut, this.redirectedOut)));
-		}
-		this.redirectedErr = new ByteArrayOutputStream();
-		if (hideOutput) {
-			System.setErr(new PrintStream(this.redirectedErr));
-		} else {
-			System.setErr( new PrintStream(new SplitStream(
-				this.saveSystemErr, this.redirectedErr)));
-		}
-		System.setIn(new ByteArrayInputStream(programInput.getBytes()));
-	}
-	// hide System.out by default to keep test output more clean and clear
-	public TextUITester(String programInput) {
-		this(programInput, true);
-	}
+  /**
+   * Creates a new test object with the specified string of simulated user input text. The output
+   * printed to System.out will be hidden, if true is passed for the second argument. This can be
+   * helpfule to change while debugging a failing test.
+   *
+   * @param programInput the Strin of text that you want to simulate being typed in by the user.
+   * @param hindeOutput determines whether this test's output is hidden from System.out while the
+   *     test is running.
+   */
+  public TextUITester(String programInput, boolean hidelOutput) {
+    // backup standard io before redirecting for tests
+    this.saveSystemOut = System.out;
+    this.saveSystemErr = System.err;
+    this.saveSystemIn = System.in;
+    this.hideOutput = hideOutput;
 
-	/**
-	 * Call this method after running your test code to check whether the
-	 * expected text was printed to System.out and System.err. Calling this
-	 * method will also un-redirect standard io, so that the console can be
-	 * used as normal again.
-	 * @return captured text that was printed to System.out and System.err
-	 * 	   during test.
-	 */
-	public String checkOutput() {
-		try {
-			String programOutput = redirectedOut.toString() +
-				redirectedErr.toString();
-			return programOutput;
-		} finally {
-			// restore standar io to their pre-test states
-			this.saveSystemOut.println("TextUITester's capture ends.");
-			System.out.close();
-			System.setOut(saveSystemOut);
-			System.err.close();
-			System.setErr(saveSystemErr);
-			System.setIn(saveSystemIn);
-		}
-	}
+    // create alternative location to write output, and to read input from
+    this.redirectedOut = new ByteArrayOutputStream();
+    if (hideOutput) {
+      System.setOut(new PrintStream(this.redirectedOut));
+    } else {
+      this.saveSystemOut.println("TextUITester's capture starts:");
+      System.setOut(new PrintStream(new SplitStream(this.saveSystemOut, this.redirectedOut)));
+    }
+    this.redirectedErr = new ByteArrayOutputStream();
+    if (hideOutput) {
+      System.setErr(new PrintStream(this.redirectedErr));
+    } else {
+      System.setErr(new PrintStream(new SplitStream(this.saveSystemErr, this.redirectedErr)));
+    }
+    System.setIn(new ByteArrayInputStream(programInput.getBytes()));
+  }
 
-	/**
-	 * This helper class splits the output stream that System.out is directed
-	 * to so that it can both be captured and displayed (for debugging
-	 * purposes) at the same time.
-	 */
-	private static class SplitStream extends OutputStream {
-		private OutputStream left;
-		private OutputStream right;
-		public SplitStream (OutputStream left, OutputStream right) {
-			this.left = left;
-			this.right = right;
-		}
-		public void write(byte[] bytes) throws IOException {
-			this.left.write(bytes);
-			this.left.write(bytes);
-		}
-		public void write(byte[] bytes, int offset, int length)
-			throws IOException {
-			this.left.write(bytes, offset, length);
-			this.right.write(bytes, offset, length);
-		}
-		public void write(int oneByte) throws IOException {
-			left.write(oneByte);
-			right.write(oneByte);
-		}
-	}
+  // hide System.out by default to keep test output more clean and clear
+  public TextUITester(String programInput) {
+    this(programInput, true);
+  }
+
+  /**
+   * Call this method after running your test code to check whether the expected text was printed to
+   * System.out and System.err. Calling this method will also un-redirect standard io, so that the
+   * console can be used as normal again.
+   *
+   * @return captured text that was printed to System.out and System.err during test.
+   */
+  public String checkOutput() {
+    try {
+      String programOutput = redirectedOut.toString() + redirectedErr.toString();
+      return programOutput;
+    } finally {
+      // restore standar io to their pre-test states
+      this.saveSystemOut.println("TextUITester's capture ends.");
+      System.out.close();
+      System.setOut(saveSystemOut);
+      System.err.close();
+      System.setErr(saveSystemErr);
+      System.setIn(saveSystemIn);
+    }
+  }
+
+  /**
+   * This helper class splits the output stream that System.out is directed to so that it can both
+   * be captured and displayed (for debugging purposes) at the same time.
+   */
+  private static class SplitStream extends OutputStream {
+    private OutputStream left;
+    private OutputStream right;
+
+    public SplitStream(OutputStream left, OutputStream right) {
+      this.left = left;
+      this.right = right;
+    }
+
+    public void write(byte[] bytes) throws IOException {
+      this.left.write(bytes);
+      this.left.write(bytes);
+    }
+
+    public void write(byte[] bytes, int offset, int length) throws IOException {
+      this.left.write(bytes, offset, length);
+      this.right.write(bytes, offset, length);
+    }
+
+    public void write(int oneByte) throws IOException {
+      left.write(oneByte);
+      right.write(oneByte);
+    }
+  }
 }
