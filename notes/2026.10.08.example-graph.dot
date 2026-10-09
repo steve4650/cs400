@@ -1,0 +1,4 @@
+digraph epic {
+  "elvendell" -> "azland"[seconds=15, label="15sec"];
+  "azland" -> "creatures"[seconds=30, label="30sec"];
+}
