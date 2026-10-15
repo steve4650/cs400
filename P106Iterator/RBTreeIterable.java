@@ -77,7 +77,6 @@ public class RBTreeIterable<T extends Comparable<T>> extends RedBlackTree<T>
       this.stop = max;
       this.stack = new Stack<BinaryNode<R>>();
       this.buildStack(root);
-      // TODO O(log n) work to finish setup
     }
 
     /**
@@ -90,15 +89,21 @@ public class RBTreeIterable<T extends Comparable<T>> extends RedBlackTree<T>
      * @param node the root node of the subtree to process
      */
     private void buildStack(BinaryNode<R> node) {
+      // Base case
       if (node == null) {
         return;
       }
-      if (this.start.compareTo(node.getEntry()) >= 0) {
-        this.buildStack(node.downLeft());
+      // Recursive case 1
+      if (this.start != null && this.start.compareTo(node.getEntry()) > 0) {
+        this.buildStack(node.downRight());
         return;
       }
-      this.stack.push(node);
-      this.buildStack(node.downRight());
+      // Recursive case 2
+      if (this.start == null
+          || (this.start != null && this.start.compareTo(node.getEntry()) <= 0)) {
+        this.stack.push(node);
+        this.buildStack(node.downRight());
+      }
     }
 
     /** Returns true if the iterator has another value to return, and false otherwise. */
