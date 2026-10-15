@@ -2,8 +2,7 @@
 
 fmt:
 	git ls-files | grep "\.java$$" | xargs google-java-format -i
-	bun i
-	bun run oxfmt
+	bun fmt
 
 run:
 	javac P101BinarySearchTree/*.java && java P101BinarySearchTree.BinarySearchTree
@@ -15,6 +14,7 @@ run:
 	cd P105CodeReview/GJFRANCIS && javac -cp .:../../junit5.jar *.java && java -jar ../../junit5.jar -cp . -c TeamTests
 	# didn't write this myself it failed
 	# cd P105CodeReview/KINGSTROM && javac -cp .:../../junit5.jar *.java && java -jar ../../junit5.jar -cp . -c TeamTests
+	cd P106Iterator && javac -cp .:../junit5.jar *.java && java -jar ../junit5.jar -cp . --select-class=P106SubmissionChecker
 
 clean:
 	mkdir -p /tmp/cs400/01
