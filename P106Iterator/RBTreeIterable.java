@@ -98,17 +98,19 @@ public class RBTreeIterable<T extends Comparable<T>> extends RedBlackTree<T>
         this.buildStack(node.downRight());
         return;
       }
-      // Recursive case 2
-      if (this.start == null
-          || (this.start != null && this.start.compareTo(node.getEntry()) <= 0)) {
-        this.stack.push(node);
-        this.buildStack(node.downRight());
-      }
+      // Else: recursive case 2
+      this.stack.push(node);
+      this.buildStack(node.downLeft());
     }
 
     /** Returns true if the iterator has another value to return, and false otherwise. */
     public boolean hasNext() {
-      return this.stack.size() > 0;
+      try {
+        BinaryNode<R> successor = this.stack.peek();
+        return true;
+      } catch (EmptyStackException e) {
+        return false;
+      }
     }
 
     /**
@@ -121,8 +123,11 @@ public class RBTreeIterable<T extends Comparable<T>> extends RedBlackTree<T>
      */
     public R next() {
       try {
-        BinaryNode<R> value = this.stack.pop();
-        return value.getEntry();
+        BinaryNode<R> successor = this.stack.peek();
+        if (successor.downRight() != null) {
+          this.buildStack(successor.downRight());
+        }
+        return this.stack.pop().getEntry();
       } catch (EmptyStackException e) {
         throw new NoSuchElementException();
       }
