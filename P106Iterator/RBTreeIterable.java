@@ -97,7 +97,7 @@ public class RBTreeIterable<T extends Comparable<T>> extends RedBlackTree<T>
         this.buildStack(node.downLeft());
         return;
       }
-      this.stack.push(node)
+      this.stack.push(node);
       this.buildStack(node.downRight());
     }
 
