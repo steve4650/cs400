@@ -2,6 +2,8 @@ import java.util.EmptyStackException;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Stack;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 /**
  * This class extends RedBlackTree into a tree that supports iterating over the values it stores in
@@ -141,5 +143,80 @@ public class RBTreeIterable<T extends Comparable<T>> extends RedBlackTree<T>
         throw new NoSuchElementException();
       }
     }
+  }
+
+  /*
+   * Test integers, duplicates, and no start/stop points
+   */
+  @Test
+  public void testIter1() {
+    RBTreeIterable<Integer> tree = new RBTreeIterable<>();
+    tree.add(5);
+    tree.add(3);
+    tree.add(3);
+    tree.add(1);
+
+    tree.setIteratorMin(null);
+    tree.setIteratorMax(null);
+
+    Iterator<Integer> iter = tree.iterator();
+    Assertions.assertTrue(iter.hasNext());
+    Assertions.assertEquals(1, iter.next());
+    Assertions.assertTrue(iter.hasNext());
+    Assertions.assertEquals(3, iter.next());
+    Assertions.assertTrue(iter.hasNext());
+    Assertions.assertEquals(3, iter.next());
+    Assertions.assertTrue(iter.hasNext());
+    Assertions.assertEquals(5, iter.next());
+    Assertions.assertFalse(iter.hasNext());
+  }
+
+  /**
+   * Tests strings, no duplicates, start points with no stop points, and stop points with no start
+   * points
+   */
+  @Test
+  public void testIter2() {
+    RBTreeIterable<String> tree = new RBTreeIterable<>();
+    tree.add("banana");
+    tree.add("apple");
+    tree.add("apple");
+    tree.add("cherry");
+
+    tree.setIteratorMin("apple");
+    tree.setIteratorMax(null);
+
+    Iterator<String> it = tree.iterator();
+    Assertions.assertTrue(it.hasNext());
+    Assertions.assertEquals("apple", it.next());
+    Assertions.assertTrue(it.hasNext());
+    Assertions.assertEquals("apple", it.next());
+    Assertions.assertTrue(it.hasNext());
+    Assertions.assertEquals("banana", it.next());
+    Assertions.assertTrue(it.hasNext());
+    Assertions.assertEquals("cherry", it.next());
+    Assertions.assertFalse(it.hasNext());
+  }
+
+  /** Tests strings, duplicates, and start and stop points */
+  @Test
+  public void testIter3() {
+    RBTreeIterable<String> tree = new RBTreeIterable<>();
+    tree.add("dog");
+    tree.add("cat");
+    tree.add("cat");
+    tree.add("fish");
+
+    tree.setIteratorMin(null);
+    tree.setIteratorMax("dog");
+
+    Iterator<String> it = tree.iterator();
+    Assertions.assertTrue(it.hasNext());
+    Assertions.assertEquals("cat", it.next());
+    Assertions.assertTrue(it.hasNext());
+    Assertions.assertEquals("cat", it.next());
+    Assertions.assertTrue(it.hasNext());
+    Assertions.assertEquals("dog", it.next());
+    Assertions.assertFalse(it.hasNext());
   }
 }

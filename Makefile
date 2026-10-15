@@ -14,6 +14,7 @@ run:
 	cd P105CodeReview/GJFRANCIS && javac -cp .:../../junit5.jar *.java && java -jar ../../junit5.jar -cp . -c TeamTests
 	# didn't write this myself it failed
 	# cd P105CodeReview/KINGSTROM && javac -cp .:../../junit5.jar *.java && java -jar ../../junit5.jar -cp . -c TeamTests
+	cd P106Iterator && javac -cp .:../junit5.jar *.java && java -jar ../junit5.jar -cp . --select-class=P106SubmissionChecker
 
 clean:
 	mkdir -p /tmp/cs400/01
