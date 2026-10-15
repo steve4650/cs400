@@ -1,3 +1,4 @@
+import java.util.EmptyStackException;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Stack;
@@ -90,10 +91,10 @@ public class RBTreeIterable<T extends Comparable<T>> extends RedBlackTree<T>
      * @param node the root node of the subtree to process
      */
     private void buildStack(BinaryNode<R> node) {
-      if(node == null) {
+      if (node == null) {
         return;
       }
-      if(this.start.compareTo(node.getEntry()) >= 0  ) {
+      if (this.start.compareTo(node.getEntry()) >= 0) {
         this.buildStack(node.downLeft());
         return;
       }
@@ -103,7 +104,7 @@ public class RBTreeIterable<T extends Comparable<T>> extends RedBlackTree<T>
 
     /** Returns true if the iterator has another value to return, and false otherwise. */
     public boolean hasNext() {
-      return false;
+      return this.stack.size() > 0;
     }
 
     /**
@@ -115,7 +116,12 @@ public class RBTreeIterable<T extends Comparable<T>> extends RedBlackTree<T>
      * @throws NoSuchElementException if the iterator has no more values to return
      */
     public R next() {
-      return null;
+      try {
+        BinaryNode<R> value = this.stack.pop();
+        return value.getEntry();
+      } catch (EmptyStackException e) {
+        throw new NoSuchElementException();
+      }
     }
   }
 }
