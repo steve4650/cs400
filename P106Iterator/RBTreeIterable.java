@@ -46,8 +46,7 @@ public class RBTreeIterable<T extends Comparable<T>> extends RedBlackTree<T>
    * exists in the tree.
    */
   public Iterator<T> iterator() {
-    TreeIterator<T> iterator = new TreeIterator<T>(this.root, this.minimum, this.maximum);
-    return iterator;
+    return new TreeIterator<T>(this.root, this.minimum, this.maximum);
   }
 
   /**

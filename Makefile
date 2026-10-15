@@ -2,8 +2,7 @@
 
 fmt:
 	git ls-files | grep "\.java$$" | xargs google-java-format -i
-	bun i
-	bun run oxfmt
+	bun fmt
 
 run:
 	javac P101BinarySearchTree/*.java && java P101BinarySearchTree.BinarySearchTree
