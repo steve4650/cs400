@@ -108,6 +108,7 @@ public class RBTreeIterable<T extends Comparable<T>> extends RedBlackTree<T>
     /** Returns true if the iterator has another value to return, and false otherwise. */
     public boolean hasNext() {
       try {
+        // Throws exception if empty
         BinaryNode<R> successor = this.stack.peek();
         if (this.stop == null) {
           return true;
@@ -171,52 +172,70 @@ public class RBTreeIterable<T extends Comparable<T>> extends RedBlackTree<T>
     Assertions.assertFalse(iter.hasNext());
   }
 
-  /**
+  /*
    * Tests strings, no duplicates, start points with no stop points, and stop points with no start
    * points
    */
   @Test
   public void testIter2() {
     RBTreeIterable<String> tree = new RBTreeIterable<>();
-    tree.add("banana");
-    tree.add("apple");
-    tree.add("apple");
-    tree.add("cherry");
+    tree.add("andromeda");
+    tree.add("zulu");
+    tree.add("tomato");
+    tree.add("iceberg");
+    tree.add("fortune");
 
-    tree.setIteratorMin("apple");
+    // start point, no stop point
+    tree.setIteratorMin("barbados");
     tree.setIteratorMax(null);
 
-    Iterator<String> it = tree.iterator();
-    Assertions.assertTrue(it.hasNext());
-    Assertions.assertEquals("apple", it.next());
-    Assertions.assertTrue(it.hasNext());
-    Assertions.assertEquals("apple", it.next());
-    Assertions.assertTrue(it.hasNext());
-    Assertions.assertEquals("banana", it.next());
-    Assertions.assertTrue(it.hasNext());
-    Assertions.assertEquals("cherry", it.next());
-    Assertions.assertFalse(it.hasNext());
+    Iterator<String> iter = tree.iterator();
+    Assertions.assertTrue(iter.hasNext());
+    Assertions.assertEquals("fortune", iter.next());
+    Assertions.assertTrue(iter.hasNext());
+    Assertions.assertEquals("iceberg", iter.next());
+    Assertions.assertTrue(iter.hasNext());
+    Assertions.assertEquals("tomato", iter.next());
+    Assertions.assertTrue(iter.hasNext());
+    Assertions.assertEquals("zulu", iter.next());
+    Assertions.assertFalse(iter.hasNext());
+
+    // stop point, no start point
+    tree.setIteratorMin(null);
+    tree.setIteratorMax("andromeda");
+
+    iter = tree.iterator();
+    Assertions.assertTrue(iter.hasNext());
+    Assertions.assertEquals("andromeda", iter.next());
+    Assertions.assertFalse(iter.hasNext());
   }
 
-  /** Tests strings, duplicates, and start and stop points */
+  /*
+   * Tests strings, duplicates, and start and stop points
+   */
   @Test
   public void testIter3() {
     RBTreeIterable<String> tree = new RBTreeIterable<>();
-    tree.add("dog");
-    tree.add("cat");
-    tree.add("cat");
+    tree.add("borealis");
+    tree.add("pumpkin");
+    tree.add("pumpkin");
+    tree.add("fish");
     tree.add("fish");
 
-    tree.setIteratorMin(null);
-    tree.setIteratorMax("dog");
+    tree.setIteratorMin("borealis");
+    tree.setIteratorMax("pumpkin");
 
-    Iterator<String> it = tree.iterator();
-    Assertions.assertTrue(it.hasNext());
-    Assertions.assertEquals("cat", it.next());
-    Assertions.assertTrue(it.hasNext());
-    Assertions.assertEquals("cat", it.next());
-    Assertions.assertTrue(it.hasNext());
-    Assertions.assertEquals("dog", it.next());
-    Assertions.assertFalse(it.hasNext());
+    Iterator<String> iter = tree.iterator();
+    Assertions.assertTrue(iter.hasNext());
+    Assertions.assertEquals("borealis", iter.next());
+    Assertions.assertTrue(iter.hasNext());
+    Assertions.assertEquals("fish", iter.next());
+    Assertions.assertTrue(iter.hasNext());
+    Assertions.assertEquals("fish", iter.next());
+    Assertions.assertTrue(iter.hasNext());
+    Assertions.assertEquals("pumpkin", iter.next());
+    Assertions.assertTrue(iter.hasNext());
+    Assertions.assertEquals("pumpkin", iter.next());
+    Assertions.assertFalse(iter.hasNext());
   }
 }
