@@ -107,7 +107,10 @@ public class RBTreeIterable<T extends Comparable<T>> extends RedBlackTree<T>
     public boolean hasNext() {
       try {
         BinaryNode<R> successor = this.stack.peek();
-        return true;
+        if (this.stop == null) {
+          return true;
+        }
+        return this.stop.compareTo(successor.getEntry()) >= 0;
       } catch (EmptyStackException e) {
         return false;
       }
@@ -124,10 +127,16 @@ public class RBTreeIterable<T extends Comparable<T>> extends RedBlackTree<T>
     public R next() {
       try {
         BinaryNode<R> successor = this.stack.peek();
+
+        if (this.stop != null && this.stop.compareTo(successor.getEntry()) < 0) {
+          throw new NoSuchElementException();
+        }
+
+        successor = this.stack.pop();
         if (successor.downRight() != null) {
           this.buildStack(successor.downRight());
         }
-        return this.stack.pop().getEntry();
+        return successor.getEntry();
       } catch (EmptyStackException e) {
         throw new NoSuchElementException();
       }
