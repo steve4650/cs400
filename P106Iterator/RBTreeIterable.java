@@ -93,7 +93,7 @@ public class RBTreeIterable<T extends Comparable<T>> extends RedBlackTree<T>
       if(node == null) {
         return;
       }
-      if(node.getEntry().compareTo(this.start) < 0 ) {
+      if(this.start.compareTo(node.getEntry()) >= 0  ) {
         this.buildStack(node.downLeft());
         return;
       }
