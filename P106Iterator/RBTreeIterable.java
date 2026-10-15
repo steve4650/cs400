@@ -72,7 +72,13 @@ public class RBTreeIterable<T extends Comparable<T>> extends RedBlackTree<T>
      * @param min the minimum value that the iterator will return
      * @param max the maximum value that the iterator will return
      */
-    public TreeIterator(BinaryNode<R> root, Comparable<R> min, Comparable<R> max) {}
+    public TreeIterator(BinaryNode<R> root, Comparable<R> min, Comparable<R> max) {
+      this.start = min;
+      this.stop = max;
+      this.stack = new Stack<BinaryNode<R>>();
+      this.buildStack(root);
+      // TODO O(log n) work to finish setup
+    }
 
     /**
      * Helper method for initializing and updating the stack. This method both - finds the next data
@@ -83,7 +89,17 @@ public class RBTreeIterable<T extends Comparable<T>> extends RedBlackTree<T>
      *
      * @param node the root node of the subtree to process
      */
-    private void buildStack(BinaryNode<R> node) {}
+    private void buildStack(BinaryNode<R> node) {
+      if(node == null) {
+        return;
+      }
+      if(node.getEntry().compareTo(this.start) < 0 ) {
+        this.buildStack(node.downLeft());
+        return;
+      }
+      this.stack.push(node)
+      this.buildStack(node.downRight());
+    }
 
     /** Returns true if the iterator has another value to return, and false otherwise. */
     public boolean hasNext() {
