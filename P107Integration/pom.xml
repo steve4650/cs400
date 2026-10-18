@@ -8,7 +8,7 @@
          <sourceDirectory>${project.basedir}/main</sourceDirectory>
          <testSourceDirectory>${project.basedir}/test</testSourceDirectory>
          <outputDirectory>${project.basedir}/target/classes/app</outputDirectory>
-         <testOutputDirectory>${project.basedir}/out/classes/test</testOutputDirectory>
+         <testOutputDirectory>${project.basedir}/target/classes/test</testOutputDirectory>
          <plugins>
              <plugin>
                  <groupId>org.apache.maven.plugins</groupId>
