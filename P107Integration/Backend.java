@@ -12,7 +12,7 @@ public class Backend implements BackendInterface {
   String filterTime = null;
 
   public Backend() {
-    this.tree = new Tree_Placeholder();
+    this.tree = new Tree();
   }
 
   @Override

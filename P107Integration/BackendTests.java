@@ -3,19 +3,19 @@ import org.junit.jupiter.api.Test;
 
 /**
  * BackendTests - JUnit 5 tests for testing the functionality of the Backend class in combination
- * with the Tree_Placeholder.
+ * with the Tree.
  */
 public class BackendTests {
 
   /**
    * roleTest1 tests adding a record using addRecord. We will test this by verifying an empty
-   * backend has size 3 and a non-empty one has size 4, using the Tree_Placeholder reference method.
+   * backend has size 3 and a non-empty one has size 4, using the Tree reference method.
    *
    * <p>It tests the readData method in the same way.
    */
   @Test
   public void roleTest1() {
-    Tree_Placeholder tree = new Tree_Placeholder();
+    Tree tree = new Tree();
     Backend backend = new Backend();
 
     // Calling addRecord method
@@ -37,7 +37,7 @@ public class BackendTests {
 
   /**
    * roleTest2 tests the size of the values of filtered slices of the dummy data returned by
-   * Tree_Placeholder.
+   * Tree.
    */
   @Test
   public void roleTest2() {

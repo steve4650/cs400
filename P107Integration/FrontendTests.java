@@ -99,7 +99,7 @@ public class FrontendTests {
   protected void testCommand() {
     Scanner in = new Scanner(System.in);
     String command = in.nextLine();
-    BackendInterface backend = new Backend_Placeholder(new Tree_Placeholder());
+    BackendInterface backend = new Backend(new Tree());
     Frontend frontend = new Frontend(in, backend);
     frontend.processSingleCommand(command);
   }
