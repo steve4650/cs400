@@ -1,3 +1,4 @@
 node_modules
 **/*.class
+**/target
 junit5.jar
