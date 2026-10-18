@@ -16,6 +16,7 @@ run:
 	# didn't write this myself it failed
 	# cd P105CodeReview/KINGSTROM && javac -cp .:../../junit5.jar *.java && java -jar ../../junit5.jar -cp . -c TeamTests
 	cd P106Iterator && javac -cp .:../junit5.jar *.java && java -jar ../junit5.jar -cp . --select-class=P106SubmissionChecker
+	cd P107Integration && mvn compile && mvn test
 
 clean:
 	mkdir -p /tmp/cs400/01
