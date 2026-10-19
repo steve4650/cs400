@@ -35,8 +35,7 @@ public class BackendTests {
   }
 
   /**
-   * roleTest2 tests the size of the values of filtered slices of the dummy data returned by
-   * Tree.
+   * roleTest2 tests the size of the values of filtered slices of the dummy data returned by Tree.
    */
   @Test
   public void roleTest2() {
