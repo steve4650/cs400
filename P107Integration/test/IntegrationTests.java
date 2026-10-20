@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 
 public class IntegrationTests {
 
+  // test size after inserting different things with submit commands
   @Test
   public void IntegrationTest1() {
     RBTreeIterable<GameRecord> tree = new RBTreeIterable<GameRecord>();
@@ -13,11 +14,12 @@ public class IntegrationTests {
     Frontend frontend = new Frontend(in, backend);
 
     frontend.processSingleCommand("submit Stephen AFRICA 1 2 3 456:57:59");
-    Assertions.assertEquals(1, tree.size());
+    Assertions.assertEquals(4, tree.size());
     List<String> topTen = backend.getTopTen();
     Assertions.assertTrue(topTen.contains("Stephen"));
   }
 
+  // submit records.csv and test size of backend after applying different filters
   @Test
   public void IntegrationTest2() {
     RBTreeIterable<GameRecord> tree = new RBTreeIterable<GameRecord>();
@@ -36,6 +38,7 @@ public class IntegrationTests {
     Assertions.assertNotNull(timeFiltered);
   }
 
+  // test size after inserting different things with submit commands THEN trying different filters
   @Test
   public void IntegrationTest3() {
     RBTreeIterable<GameRecord> tree = new RBTreeIterable<GameRecord>();
@@ -53,8 +56,9 @@ public class IntegrationTests {
     Assertions.assertTrue(results.size() <= 10);
   }
 
+  // like test 3 except iterate and test specific values in sorted order
   @Test
-  public void showTopRecordsIntegration() {
+  public void IntegrationTest4() {
     RBTreeIterable<GameRecord> tree = new RBTreeIterable<GameRecord>();
     Backend backend = new Backend(tree);
     Scanner in = new Scanner(System.in);
@@ -65,11 +69,15 @@ public class IntegrationTests {
     frontend.processSingleCommand("submit McNulty AFRICA 42023 140 353 634:06:42");
 
     List<String> topRecords = backend.getTopTen();
-    Assertions.assertEquals(3, topRecords.size());
+    Assertions.assertEquals(6, topRecords.size());
 
-    backend.applyAndSetFilter("1000:00:00");
+    backend.applyAndSetFilter("900:00:00");
     List<String> filteredTop = backend.getTopTen();
-    Assertions.assertTrue(filteredTop.size() <= 3);
+    Assertions.assertEquals(3, filteredTop.size());
+
+    backend.applyAndSetFilter("800:00:00");
+    List<String> filteredTop2 = backend.getTopTen();
+    Assertions.assertEquals(2, filteredTop.size());
 
     backend.getAndSetRange(300, 500);
     List<String> rangeFiltered = backend.getTopTen();

@@ -31,7 +31,7 @@ public class BackendTests {
     } catch (Exception e) {
       Assertions.fail("readData threw an exception: " + e.getMessage());
     }
-    Assertions.assertEquals(4, backend2.tree.size());
+    Assertions.assertEquals(603, backend2.tree.size());
   }
 
   /**
