@@ -27,11 +27,11 @@ public class IntegrationTests {
 
     frontend.processSingleCommand("submit multiple records.csv");
     Assertions.assertTrue(tree.size() > 0);
-    
+
     List<String> levelFiltered = backend.getAndSetRange(400, 500);
     Assertions.assertNotNull(levelFiltered);
     Assertions.assertTrue(levelFiltered.size() >= 0);
-    
+
     List<String> timeFiltered = backend.applyAndSetFilter("900:00:00");
     Assertions.assertNotNull(timeFiltered);
   }
@@ -46,10 +46,10 @@ public class IntegrationTests {
     frontend.processSingleCommand("submit multiple records.csv");
     frontend.processSingleCommand("level 300 to 600");
     frontend.processSingleCommand("time 800:00:00");
-    
+
     List<String> results = backend.getTopTen();
     Assertions.assertNotNull(results);
-    
+
     Assertions.assertTrue(results.size() <= 10);
   }
 
@@ -66,11 +66,11 @@ public class IntegrationTests {
 
     List<String> topRecords = backend.getTopTen();
     Assertions.assertEquals(3, topRecords.size());
-    
+
     backend.applyAndSetFilter("1000:00:00");
     List<String> filteredTop = backend.getTopTen();
     Assertions.assertTrue(filteredTop.size() <= 3);
-    
+
     backend.getAndSetRange(300, 500);
     List<String> rangeFiltered = backend.getTopTen();
     Assertions.assertNotNull(rangeFiltered);
