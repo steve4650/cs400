@@ -13,27 +13,53 @@ public class IntegrationTests {
     Scanner in = new Scanner(System.in);
     Frontend frontend = new Frontend(in, backend);
 
-    int initialSize = tree.size();
+    frontend.processSingleCommand("submit Johnny AFRICA 1000 200 600 100:00:00");
+    Assertions.assertEquals(1, tree.size());
 
-    frontend.processSingleCommand("submit Stephen AFRICA 1 2 3 456:57:59");
-    Assertions.assertEquals(initialSize + 1, tree.size());
+    frontend.processSingleCommand("submit Ziggy EUROPE 1001 210 650 200:00:00");
+    Assertions.assertEquals(2, tree.size());
 
-    frontend.processSingleCommand("submit Alice EUROPE 10 20 50 100:00:00");
-    Assertions.assertEquals(initialSize + 2, tree.size());
+    frontend.processSingleCommand("submit Landsman ASIA 1002 220 700 300:00:00");
+    Assertions.assertEquals(3, tree.size());
 
-    frontend.processSingleCommand("submit Bob ASIA 30 40 70 200:00:00");
-    Assertions.assertEquals(initialSize + 3, tree.size());
+    frontend.processSingleCommand("submit Wee-Bey NORTH_AMERICA 1003 230 750 400:00:00");
+    Assertions.assertEquals(4, tree.size());
 
-    frontend.processSingleCommand("submit Bad AMERICA 1 2 3 456:57:59");
-    frontend.processSingleCommand("submit Bad AFRICA x 2 3 456:57:59");
-    frontend.processSingleCommand("submit Bad AFRICA 1 2 x 456:57:59");
-    frontend.processSingleCommand("submit Bad AFRICA 1 2 3 456:57");
-    Assertions.assertEquals(initialSize + 3, tree.size());
+    frontend.processSingleCommand("submit Lester SOUTH_AMERICA 1004 240 800 500:00:00");
+    Assertions.assertEquals(5, tree.size());
+
+    frontend.processSingleCommand("submit Kima AUSTRALIA 1005 250 850 600:00:00");
+    Assertions.assertEquals(6, tree.size());
+
+    frontend.processSingleCommand("submit Pearlman ANTARCTICA 1006 260 900 700:00:00");
+    Assertions.assertEquals(7, tree.size());
+
+    frontend.processSingleCommand("submit Daniels AFRICA 1007 270 950 800:00:00");
+    Assertions.assertEquals(8, tree.size());
+
+    frontend.processSingleCommand("submit Cheese EUROPE 1008 280 1000 900:00:00");
+    Assertions.assertEquals(9, tree.size());
+
+    frontend.processSingleCommand("submit Lamar ASIA 1009 290 1050 950:00:00");
+    Assertions.assertEquals(10, tree.size());
+
+    Assertions.assertEquals(10, tree.size());
 
     List<String> topTen = backend.getTopTen();
-    Assertions.assertTrue(topTen.contains("Stephen"));
-    Assertions.assertTrue(topTen.contains("Alice"));
-    Assertions.assertTrue(topTen.contains("Bob"));
+    Assertions.assertEquals(10, topTen.size());
+    Assertions.assertTrue(
+        topTen.containsAll(
+            List.of(
+                "Johnny",
+                "Ziggy",
+                "Landsman",
+                "Wee-Bey",
+                "Lester",
+                "Kima",
+                "Pearlman",
+                "Daniels",
+                "Cheese",
+                "Lamar")));
   }
 
   // submit records.csv and test size of backend after applying different filters
@@ -47,7 +73,7 @@ public class IntegrationTests {
     int initialSize = tree.size();
     frontend.processSingleCommand("submit multiple records.csv");
 
-    Assertions.assertEquals(initialSize + 600, tree.size());
+    Assertions.assertEquals(600, tree.size());
 
     List<String> levelFiltered = backend.getAndSetRange(400, 500);
     Assertions.assertNotNull(levelFiltered);
@@ -61,7 +87,7 @@ public class IntegrationTests {
     Assertions.assertEquals(60, timeFilterCleared.size());
 
     List<String> noFilters = backend.getAndSetRange(null, null);
-    Assertions.assertEquals(initialSize + 600, noFilters.size());
+    Assertions.assertEquals(600, noFilters.size());
   }
 
   // test size after inserting different things with submit commands THEN trying different filters
@@ -74,29 +100,30 @@ public class IntegrationTests {
 
     int initialSize = tree.size();
 
-    frontend.processSingleCommand("submit Alice EUROPE 100 20 250 500:00:00");
-    frontend.processSingleCommand("submit Bob ASIA 200 30 350 550:00:00");
-    frontend.processSingleCommand("submit Carol AFRICA 300 40 450 650:00:00");
-    frontend.processSingleCommand("submit Dave NORTH_AMERICA 400 50 550 750:00:00");
-    frontend.processSingleCommand("submit Eve SOUTH_AMERICA 500 60 650 850:00:00");
-    frontend.processSingleCommand("submit Frank AUSTRALIA 600 70 750 950:00:00");
+    frontend.processSingleCommand("submit Johnny AFRICA 1000 200 600 100:00:00");
+    frontend.processSingleCommand("submit Ziggy EUROPE 1001 210 650 200:00:00");
+    frontend.processSingleCommand("submit Landsman ASIA 1002 220 700 300:00:00");
+    frontend.processSingleCommand("submit Wee-Bey NORTH_AMERICA 1003 230 750 400:00:00");
+    frontend.processSingleCommand("submit Lester SOUTH_AMERICA 1004 240 800 500:00:00");
+    frontend.processSingleCommand("submit Kima AUSTRALIA 1005 250 850 600:00:00");
+    frontend.processSingleCommand("submit Pearlman ANTARCTICA 1006 260 900 700:00:00");
+    frontend.processSingleCommand("submit Daniels AFRICA 1007 270 950 800:00:00");
+    frontend.processSingleCommand("submit Cheese EUROPE 1008 280 1000 900:00:00");
+    frontend.processSingleCommand("submit Lamar ASIA 1009 290 1050 950:00:00");
 
-    frontend.processSingleCommand("submit Bad AMERICA 1 2 3 100:00:00");
-    frontend.processSingleCommand("submit Bad AFRICA 1 2 3 100:00");
+    Assertions.assertEquals(10, tree.size());
 
-    Assertions.assertEquals(initialSize + 6, tree.size());
+    frontend.processSingleCommand("level 700 to 1000");
+    List<String> levelFiltered = backend.getAndSetRange(700, 1000);
+    Assertions.assertEquals(7, levelFiltered.size());
 
-    frontend.processSingleCommand("level 300 to 600");
-    List<String> levelFiltered = backend.getAndSetRange(300, 600);
-    Assertions.assertEquals(6, levelFiltered.size());
-
-    frontend.processSingleCommand("time 700:00:00");
-    List<String> timeFiltered = backend.applyAndSetFilter("700:00:00");
-    Assertions.assertEquals(4, timeFiltered.size());
+    frontend.processSingleCommand("time 750:00:00");
+    List<String> timeFiltered = backend.applyAndSetFilter("750:00:00");
+    Assertions.assertEquals(5, timeFiltered.size());
 
     List<String> results = backend.getTopTen();
     Assertions.assertNotNull(results);
-    Assertions.assertEquals(4, results.size());
+    Assertions.assertEquals(5, results.size());
   }
 
   // like test 3 except iterate and test specific values in sorted order
@@ -107,26 +134,44 @@ public class IntegrationTests {
     Scanner in = new Scanner(System.in);
     Frontend frontend = new Frontend(in, backend);
 
-    frontend.processSingleCommand("submit Virginia EUROPE 9 8 20 640:19:12");
-    frontend.processSingleCommand("submit Bunk ASIA 48563 130 300 816:08:06");
-    frontend.processSingleCommand("submit McNulty AFRICA 42023 140 600 634:06:42");
-    frontend.processSingleCommand("submit Omar NORTH_AMERICA 1000 150 700 400:00:00");
+    frontend.processSingleCommand("submit Johnny AFRICA 1000 200 600 100:00:00");
+    frontend.processSingleCommand("submit Ziggy EUROPE 1001 210 650 200:00:00");
+    frontend.processSingleCommand("submit Landsman ASIA 1002 220 700 300:00:00");
+    frontend.processSingleCommand("submit Wee-Bey NORTH_AMERICA 1003 230 750 400:00:00");
+    frontend.processSingleCommand("submit Lester SOUTH_AMERICA 1004 240 800 500:00:00");
+    frontend.processSingleCommand("submit Kima AUSTRALIA 1005 250 850 600:00:00");
+    frontend.processSingleCommand("submit Pearlman ANTARCTICA 1006 260 900 700:00:00");
+    frontend.processSingleCommand("submit Daniels AFRICA 1007 270 950 800:00:00");
+    frontend.processSingleCommand("submit Cheese EUROPE 1008 280 1000 900:00:00");
+    frontend.processSingleCommand("submit Lamar ASIA 1009 290 1050 950:00:00");
 
-    List<String> allRecords = backend.getAndSetRange(null, null);
+    List<String> allRecords = backend.getAndSetRange(550, 1100);
     Assertions.assertEquals(
         List.of(
-            "Virginia", "Bunk", "v0idt3mp0", "speedRoyalty", "xXxgamer47xXx", "McNulty", "Omar"),
+            "Johnny",
+            "Ziggy",
+            "Landsman",
+            "Wee-Bey",
+            "Lester",
+            "Kima",
+            "Pearlman",
+            "Daniels",
+            "Cheese",
+            "Lamar"),
         allRecords);
 
-    List<String> timeFiltered = backend.applyAndSetFilter("700:00:00");
+    List<String> timeFiltered = backend.applyAndSetFilter("750:00:00");
     Assertions.assertEquals(
-        List.of("Virginia", "v0idt3mp0", "speedRoyalty", "McNulty", "Omar"), timeFiltered);
+        List.of("Johnny", "Ziggy", "Landsman", "Wee-Bey", "Lester", "Kima", "Pearlman"),
+        timeFiltered);
 
-    List<String> rangeAndTimeFiltered = backend.getAndSetRange(300, 600);
-    Assertions.assertEquals(List.of("v0idt3mp0", "speedRoyalty", "McNulty"), rangeAndTimeFiltered);
+    List<String> rangeAndTimeFiltered = backend.getAndSetRange(700, 1000);
+    Assertions.assertEquals(
+        List.of("Landsman", "Wee-Bey", "Lester", "Kima", "Pearlman"), rangeAndTimeFiltered);
 
     List<String> rangeFiltered = backend.applyAndSetFilter(null);
     Assertions.assertEquals(
-        List.of("Bunk", "v0idt3mp0", "speedRoyalty", "xXxgamer47xXx", "McNulty"), rangeFiltered);
+        List.of("Landsman", "Wee-Bey", "Lester", "Kima", "Pearlman", "Daniels", "Cheese"),
+        rangeFiltered);
   }
 }
