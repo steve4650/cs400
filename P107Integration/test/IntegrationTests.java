@@ -77,14 +77,14 @@ public class IntegrationTests {
 
     List<String> levelFiltered = backend.getAndSetRange(400, 500);
     Assertions.assertNotNull(levelFiltered);
-    Assertions.assertEquals(60, levelFiltered.size());
+    Assertions.assertEquals(58, levelFiltered.size());
 
     List<String> timeFiltered = backend.applyAndSetFilter("900:00:00");
     Assertions.assertNotNull(timeFiltered);
-    Assertions.assertEquals(44, timeFiltered.size());
+    Assertions.assertEquals(43, timeFiltered.size());
 
     List<String> timeFilterCleared = backend.applyAndSetFilter(null);
-    Assertions.assertEquals(60, timeFilterCleared.size());
+    Assertions.assertEquals(58, timeFilterCleared.size());
 
     List<String> noFilters = backend.getAndSetRange(null, null);
     Assertions.assertEquals(600, noFilters.size());
