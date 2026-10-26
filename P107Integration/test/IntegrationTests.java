@@ -94,7 +94,8 @@ public class IntegrationTests {
     Assertions.assertEquals(600, noFilters.size());
   }
 
-  // test size after inserting different things with single submit commands THEN trying different filters
+  // test size after inserting different things with single submit commands THEN trying different
+  // filters
   @Test
   public void IntegrationTest3() {
     RBTreeIterable<GameRecord> tree = new RBTreeIterable<GameRecord>();
@@ -134,6 +135,7 @@ public class IntegrationTests {
   // like test 3 except iterate and test specific values in sorted order
   @Test
   public void IntegrationTest4() {
+    // initialize objects
     RBTreeIterable<GameRecord> tree = new RBTreeIterable<GameRecord>();
     Backend backend = new Backend(tree);
     Scanner in = new Scanner(System.in);
@@ -151,7 +153,7 @@ public class IntegrationTests {
     frontend.processSingleCommand("submit Lamar ASIA 1009 290 1050 950:00:00");
 
     List<String> allRecords = backend.getAndSetRange(550, 1100);
-    Assertions.assertEquals(
+    Assertions.assertIterableEquals(
         List.of(
             "Johnny",
             "Ziggy",
@@ -166,16 +168,16 @@ public class IntegrationTests {
         allRecords);
 
     List<String> timeFiltered = backend.applyAndSetFilter("750:00:00");
-    Assertions.assertEquals(
+    Assertions.assertIterableEquals(
         List.of("Johnny", "Ziggy", "Landsman", "Wee-Bey", "Lester", "Kima", "Pearlman"),
         timeFiltered);
 
     List<String> rangeAndTimeFiltered = backend.getAndSetRange(700, 1000);
-    Assertions.assertEquals(
+    Assertions.assertIterableEquals(
         List.of("Landsman", "Wee-Bey", "Lester", "Kima", "Pearlman"), rangeAndTimeFiltered);
 
     List<String> rangeFiltered = backend.applyAndSetFilter(null);
-    Assertions.assertEquals(
+    Assertions.assertIterableEquals(
         List.of("Landsman", "Wee-Bey", "Lester", "Kima", "Pearlman", "Daniels", "Cheese"),
         rangeFiltered);
   }
