@@ -30,7 +30,8 @@ public class Backend implements BackendInterface {
         if (cn != null && cn.contains("IntegrationTests")) {
           isIntegrationTest = true;
         }
-      } catch (Exception ex) {}
+      } catch (Exception ex) {
+      }
       if (!isIntegrationTest) {
         try {
           this.tree.add(
@@ -40,7 +41,8 @@ public class Backend implements BackendInterface {
               new GameRecord(
                   "xXxgamer47xXx", GameRecord.Continent.ASIA, 48563, 130, 493, "956:48:46"));
           this.tree.add(
-              new GameRecord("v0idt3mp0", GameRecord.Continent.AFRICA, 42023, 140, 353, "634:06:42"));
+              new GameRecord(
+                  "v0idt3mp0", GameRecord.Continent.AFRICA, 42023, 140, 353, "634:06:42"));
         } catch (Exception e) {
         }
       }
