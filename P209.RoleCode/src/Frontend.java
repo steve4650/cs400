@@ -19,16 +19,18 @@ public class Frontend implements FrontendInterface {
 
   @Override
   public String createHTMLShortestPathResponse(String start, String end) {
-    List<String> path = this.backend.findShortestPathLocations(start, end);
-    if (path.size() == 0) {
-      return "No such path was found by our humble backend...";
-    }
     String result =
         "<p id=\"start-label\">Start Location: "
             + start
             + "</p><p id=\"end-label\">End Location: "
             + end
-            + "</p><ol>";
+            + "</p>";
+    List<String> path = this.backend.findShortestPathLocations(start, end);
+    if (path.size() == 0) {
+      result += "<p>No such path was found by our humble backend... you are searching for impossible paths.</p>";
+      return result;
+    }
+    result += "<ol>";
     for (String location : path) {
       result += "<li class=\"intermediate-location\">" + location + "</li>";
     }
@@ -53,8 +55,17 @@ public class Frontend implements FrontendInterface {
 
   @Override
   public String createHTMLReachableWithinResponse(String start, double maxTime) {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException(
-        "Unimplemented method 'createHTMLReachableWithinResponse'");
+    String result = "<p id=\"start-label\">From Location: " + start + "</p><p id=\"time-label\">Time radius: " + maxTime + " minutes</p>";
+    List<String> reachable = this.backend.getReachableWithin(start, maxTime);
+    if(reachable.size() == 0) {
+      result += "<p>None! You need to broaden your search.</p>";
+      return result; 
+    }
+    result += "<ol>";
+    for (String location : reachable) {
+      result += "<li class=\"intermediate-location\">" + location + "</li>";
+    }
+    result += "</ol>";
+    return result;
   }
 }
