@@ -1,4 +1,12 @@
+import java.util.List;
+
 public class Frontend implements FrontendInterface {
+
+  private BackendInterface backend;
+
+  public Frontend() {
+    this.backend = new Backend_Placeholder(new Graph_Placeholder());
+  }
 
   @Override
   public String createHTMLShortestPathPrompt() {
@@ -11,9 +19,27 @@ public class Frontend implements FrontendInterface {
 
   @Override
   public String createHTMLShortestPathResponse(String start, String end) {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException(
-        "Unimplemented method 'createHTMLShortestPathResponse'");
+    List<String> path = this.backend.findShortestPathLocations(start, end);
+    if (path.size() == 0) {
+      return "No such path was found by our humble backend...";
+    }
+    String result =
+        "<p id=\"start-label\">Start Location: "
+            + start
+            + "</p><p id=\"end-label\">End Location: "
+            + end
+            + "</p><ol>";
+    for (String location : path) {
+      result += "<li class=\"intermediate-location\">" + location + "</li>";
+    }
+    result += "</ol>";
+    List<Double> times = this.backend.findShortestPathTimes(start, end);
+    Double totalTime = 0.0;
+    for (Double time : times) {
+      totalTime += time;
+    }
+    result += "<p id=\"total-time-label\">Total Time: " + totalTime + " minutes</p>";
+    return result;
   }
 
   @Override
