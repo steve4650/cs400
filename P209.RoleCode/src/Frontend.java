@@ -44,9 +44,11 @@ public class Frontend implements FrontendInterface {
 
   @Override
   public String createHTMLReachableWithinPrompt() {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException(
-        "Unimplemented method 'createHTMLReachableWithinPrompt'");
+    return """
+        <input type="text" id="from" placeholder="From Location">
+        <input type="text" id="time" placeholder="Time radius (minutes)">
+        <input type="button" value="Reachable From Within" id="reachableWithinButton">
+    """;
   }
 
   @Override
