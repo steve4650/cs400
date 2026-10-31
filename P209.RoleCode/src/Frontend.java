@@ -27,7 +27,9 @@ public class Frontend implements FrontendInterface {
             + "</p>";
     List<String> path = this.backend.findShortestPathLocations(start, end);
     if (path.size() == 0) {
-      result += "<p>No such path was found by our humble backend... you are searching for impossible paths.</p>";
+      result +=
+          "<p>No such path was found by our humble backend... you are searching for impossible"
+              + " paths.</p>";
       return result;
     }
     result += "<ol>";
@@ -55,11 +57,16 @@ public class Frontend implements FrontendInterface {
 
   @Override
   public String createHTMLReachableWithinResponse(String start, double maxTime) {
-    String result = "<p id=\"start-label\">From Location: " + start + "</p><p id=\"time-label\">Time radius: " + maxTime + " minutes</p>";
+    String result =
+        "<p id=\"start-label\">From Location: "
+            + start
+            + "</p><p id=\"time-label\">Time radius: "
+            + maxTime
+            + " minutes</p>";
     List<String> reachable = this.backend.getReachableWithin(start, maxTime);
-    if(reachable.size() == 0) {
+    if (reachable.size() == 0) {
       result += "<p>None! You need to broaden your search.</p>";
-      return result; 
+      return result;
     }
     result += "<ol>";
     for (String location : reachable) {
