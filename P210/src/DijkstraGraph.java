@@ -1,4 +1,4 @@
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -98,11 +98,8 @@ public class DijkstraGraph<NodeType, EdgeType extends Number> extends BaseGraph<
    */
   @Override
   public List<NodeType> shortestPathNodes(NodeType start, NodeType end) {
-    Node startNode = nodes.get(start);
-    Node endNode = nodes.get(end);
-
-    SearchNode path = computeShortestPath(startNode, endNode);
-    List<NodeType> result = new LinkedList<>();
+    SearchNode path = computeShortestPath(nodes.get(start), nodes.get(end));
+    List<NodeType> result = new ArrayList<NodeType>();
     for (SearchNode current = path; current != null; current = current.pred) {
       result.add(current.node.data);
     }
@@ -122,8 +119,6 @@ public class DijkstraGraph<NodeType, EdgeType extends Number> extends BaseGraph<
    */
   @Override
   public double shortestPathCost(NodeType start, NodeType end) {
-    Node startNode = nodes.get(start);
-    Node endNode = nodes.get(end);
-    return computeShortestPath(startNode, endNode).cost;
+    return computeShortestPath(nodes.get(start), nodes.get(end)).cost;
   }
 }
