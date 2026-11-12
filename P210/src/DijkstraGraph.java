@@ -84,20 +84,20 @@ public class DijkstraGraph<NodeType, EdgeType extends Number> extends BaseGraph<
     PriorityQueue<SearchNode> queue = new PriorityQueue<>();
     queue.add(new SearchNode(start));
     PlaceholderMap<NodeType, Boolean> visited = new PlaceholderMap<>();
-    visited.put(start.data, true);
     while (queue.size() > 0) {
       SearchNode current = queue.remove();
       if (current.node.data == end.data) {
         return current;
-      }
-      for (Edge edge : current.node.edgesLeaving) {
-        if (!visited.get(edge.succ.data)) {
-          queue.add(new SearchNode(current, edge));
-          visited.put(edge.succ.data, true);
+      } else if (!visited.containsKey(current.node.data)) {
+        visited.put(current.node.data, true);
+        for (Edge edge : current.node.edgesLeaving) {
+          if (!visited.containsKey(edge.succ.data)) {
+            queue.add(new SearchNode(current, edge));
+          }
         }
       }
     }
-    return null;
+    throw new NoSuchElementException("No path!");
   }
 
   /**
