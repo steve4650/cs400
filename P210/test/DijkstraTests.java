@@ -1,15 +1,12 @@
-import java.util.List;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 public class DijkstraTests {
 
-  /**
-   * Rest the result of the lecture example.
-   */
+  /** Rest the result of the lecture example. */
   @Test
   public void test1() {
-DijkstraGraph<String, Integer> graph = new DijkstraGraph<>();
+    DijkstraGraph<String, Integer> graph = new DijkstraGraph<>();
     graph.addNode("A");
     graph.addNode("B");
     graph.addNode("C");
@@ -37,5 +34,4 @@ DijkstraGraph<String, Integer> graph = new DijkstraGraph<>();
     Assertions.assertEquals("E", graph.shortestPathNodes("A", "D").get(2));
     Assertions.assertEquals("D", graph.shortestPathNodes("A", "D").get(3));
   }
-
 }
