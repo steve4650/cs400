@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+
+JUNITPATH="/libs/junit5.jar"
+
+if [[ -f ${JUNITPATH} ]]; then
+    cp ${JUNITPATH} ../
+fi
+
+if ! javac -encoding "UTF-8" -cp ../junit5.jar:./src/ ./src/*.java; then
+	echo
+	echo "Submission Failed Check: cannot compile all java files in submission"
+	exit 1
+fi
+
+if ! mvn test-compile; then
+	echo
+	echo "Submission Failed Check: project does not compile with 'mvn test-compile', but should"
+	exit 1
+fi
+
+if ! java -jar ../junit5.jar --class-path=./test/:./src/:./target/classes/test/ --select-class=P210SubmissionChecker; then
+	echo
+	echo "Submission Failed Check: one or more JUnit tests failed. This does not need to pass for the midweek deadline requirement, as it tests the 'computeShortestPath' implementation."
+	exit 1
+fi
+
+echo
+echo "Submission Passed Basic Scan"
+exit 0
