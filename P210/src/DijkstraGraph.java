@@ -1,6 +1,7 @@
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.PriorityQueue;
 
 /**
  * This class extends the BaseGraph data structure with additional methods for computing the total
@@ -80,6 +81,22 @@ public class DijkstraGraph<NodeType, EdgeType extends Number> extends BaseGraph<
    * @throws NullPointerException if the start or end node are null
    */
   protected SearchNode computeShortestPath(Node start, Node end) {
+    PriorityQueue<SearchNode> queue = new PriorityQueue<>();
+    queue.add(new SearchNode(start));
+    PlaceholderMap<NodeType, Boolean> visited = new PlaceholderMap<>();
+    visited.put(start.data, true);
+    while (queue.size() > 0) {
+      SearchNode current = queue.remove();
+      if (current.node.data == end.data) {
+        return current;
+      }
+      for (Edge edge : current.node.edgesLeaving) {
+        if (!visited.get(edge.succ.data)) {
+          queue.add(new SearchNode(current, edge));
+          visited.put(edge.succ.data, true);
+        }
+      }
+    }
     return null;
   }
 
