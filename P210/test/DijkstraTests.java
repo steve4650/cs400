@@ -1,5 +1,4 @@
 import java.util.NoSuchElementException;
-
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -70,6 +69,4 @@ public class DijkstraTests {
     Assertions.assertThrows(NoSuchElementException.class, () -> graph.shortestPathCost("D", "A"));
     Assertions.assertThrows(NoSuchElementException.class, () -> graph.shortestPathNodes("C", "B"));
   }
-
-
 }
