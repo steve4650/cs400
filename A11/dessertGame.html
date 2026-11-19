@@ -2,50 +2,50 @@
   <head>
     <title>Dessert in the Desert Browser Game</title>
     <style>
-    button {
-      color: blanchedalmond;
-      background-color: chocolate;
-      border-color: chocolate;
-      position: absolute;
-      font-size: 16px;
-      border-radius: 10px;
-    }
+      button {
+        color: blanchedalmond;
+        background-color: chocolate;
+        border-color: chocolate;
+        position: absolute;
+        font-size: 16px;
+        border-radius: 10px;
+      }
 
-    button:hover {
-      background-color: blanchedalmond;
-      color: chocolate;
-    }
+      button:hover {
+        background-color: blanchedalmond;
+        color: chocolate;
+      }
 
-    body {
-      background-color: SandyBrown;
-    }
+      body {
+        background-color: SandyBrown;
+      }
 
-    #score {
-      font-weight: 800;
-    }
+      #score {
+        font-weight: 800;
+      }
     </style>
     <script>
-    let score = 0;
-    function randomizeButtonPositions() {
-      let buttons = document.querySelectorAll("button");
-      buttons.forEach((b) => {
-        b.style.left = (Math.random() * 80 + 10) + "%";
-        b.style.top = (Math.random() * 80 + 10) + "%";
-      });
-    }
-    function handleDessertClick() {
-      randomizeButtonPositions();
-      score++;
-      document.getElementById("score").innerText = `Score: ${score}`;
-    }
+      let score = 0;
+      function randomizeButtonPositions() {
+        let buttons = document.querySelectorAll("button");
+        buttons.forEach((b) => {
+          b.style.left = Math.random() * 80 + 10 + "%";
+          b.style.top = Math.random() * 80 + 10 + "%";
+        });
+      }
+      function handleDessertClick() {
+        randomizeButtonPositions();
+        score++;
+        document.getElementById("score").innerText = `Score: ${score}`;
+      }
 
-    function handleDesertClick() {
-      randomizeButtonPositions();
-      score--;
-      document.getElementById("score").innerText = `Score: ${score}`;
-    }
+      function handleDesertClick() {
+        randomizeButtonPositions();
+        score--;
+        document.getElementById("score").innerText = `Score: ${score}`;
+      }
     </script>
-    <meta name="author" content="smdavis7">
+    <meta name="author" content="smdavis7" />
   </head>
 
   <body onload="randomizeButtonPositions()">
