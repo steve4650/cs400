@@ -1,16 +1,10 @@
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
-import java.util.NoSuchElementException;
-
-/**
- * This class extends the HashTableMap class to run submission checks on it.
- */
+/** This class extends the HashTableMap class to run submission checks on it. */
 public class P212SubmissionChecker extends HashTableMap<Integer, Integer> {
 
-  /**
-   * Checks if hashtable resizes as expected.
-   */
+  /** Checks if hashtable resizes as expected. */
   @Test
   public void testTableResize() {
     HashTableMap<String, String> map = new HashTableMap<>(8);
@@ -21,8 +15,8 @@ public class P212SubmissionChecker extends HashTableMap<Integer, Integer> {
     map.put("e", "5");
 
     // check capacity before resizing
-    Assertions.assertEquals(8, map.getCapacity());   
- 
+    Assertions.assertEquals(8, map.getCapacity());
+
     map.put("f", "6");
 
     // check capacity after resizing
@@ -37,20 +31,12 @@ public class P212SubmissionChecker extends HashTableMap<Integer, Integer> {
   public void testDuplicateInsertions() {
     HashTableMap<String, Integer> map = new HashTableMap<>();
     map.put("a", 6);
-    Assertions.assertThrows(
-           IllegalArgumentException.class,
-           () -> map.put("a", 7)
-    );
-    Assertions.assertThrows(
-           IllegalArgumentException.class,
-           () -> map.put("a", 8)
-    );
+    Assertions.assertThrows(IllegalArgumentException.class, () -> map.put("a", 7));
+    Assertions.assertThrows(IllegalArgumentException.class, () -> map.put("a", 8));
     Assertions.assertEquals(6, map.get("a"));
   }
- 
-  /**
-   * Tests the get method on a small HashTableMap with keys 1, 2, and 3.
-   */
+
+  /** Tests the get method on a small HashTableMap with keys 1, 2, and 3. */
   @Test
   public void testGetOnSmallMap123() {
     HashTableMap<Integer, String> map = new HashTableMap<>();
@@ -59,5 +45,4 @@ public class P212SubmissionChecker extends HashTableMap<Integer, Integer> {
     map.put(3, "three");
     Assertions.assertEquals("two", map.get(2));
   }
-  
 }
