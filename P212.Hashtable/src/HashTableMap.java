@@ -1,7 +1,22 @@
+import java.util.LinkedList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-public class HashTableMap implements MapADT {
+public class HashTableMap<KeyType, ValueType> implements MapADT {
+
+    protected LinkedList<Pair>[] table = null;
+
+    @SuppressWarnings("unchecked")
+    public HashTableMap(int capacity) {
+        if(capacity < 1) {
+            throw new IllegalArgumentException("small small capacity i fear...");
+        }
+        table = new LinkedList[capacity];
+    }
+
+    public HashTableMap() {
+        this(8);
+    }
 
     @Override
     public void put(Object key, Object value) throws IllegalArgumentException {
@@ -40,5 +55,18 @@ public class HashTableMap implements MapADT {
     public List getKeys() {
         return null;
     }
+
+    protected class Pair {
+
+    public KeyType key;
+    public ValueType value;
+
+    public Pair(KeyType key, ValueType value) {
+        this.key = key;
+        this.value = value;
+    }
+
+}
+
     
 }
