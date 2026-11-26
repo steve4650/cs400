@@ -13,7 +13,7 @@ public class HashTableMap<KeyType, ValueType> implements MapADT {
       throw new IllegalArgumentException("small small capacity i fear...");
     }
     this.capacity = capacity;
-    table = new LinkedList[capacity];
+    this.table = new LinkedList[capacity];
   }
 
   public HashTableMap() {
@@ -21,8 +21,8 @@ public class HashTableMap<KeyType, ValueType> implements MapADT {
   }
 
   @Override
-  public void put(Object key, Object value) throws IllegalArgumentException {
-    int index = key.hashCode() % this.capacity;
+  public void put(KeyType key, ValueType value) throws IllegalArgumentException {
+    int index = Math.abs(key.hashCode()) % this.capacity;
     if(table[index] == null) {
       table[index] = new LinkedList<Pair>();
     }
@@ -30,22 +30,34 @@ public class HashTableMap<KeyType, ValueType> implements MapADT {
   }
 
   @Override
-  public boolean containsKey(Object key) {
-    return false;
+  public boolean containsKey(KeyType key) {
+    int index = Math.abs(key.hashCode()) % this.capacity;
+    return table[index] != null;
   }
 
   @Override
-  public Object get(Object key) throws NoSuchElementException {
+  public ValueType get(KeyType key) throws NoSuchElementException {
+    int index = Math.abs(key.hashCode()) % this.capacity;
+    if(table[index]== null) {
+      throw new NoSuchElementException();
+    }
+    for(Pair pair: table[index]) {
+      if(pair.key.equals(key)) {
+        return pair.value;
+      }
+    }
+  }
+
+  @Override
+  public ValueType remove(KeyType key) throws NoSuchElementException {
     return null;
   }
 
+  @SuppressWarnings("unchecked")
   @Override
-  public Object remove(Object key) throws NoSuchElementException {
-    return null;
+  public void clear() {
+    this.table = new LinkedList[this.capacity];
   }
-
-  @Override
-  public void clear() {}
 
   @Override
   public int getSize() {
@@ -54,7 +66,7 @@ public class HashTableMap<KeyType, ValueType> implements MapADT {
 
   @Override
   public int getCapacity() {
-    return 0;
+    return this.capacity;
   }
 
   @Override
@@ -63,7 +75,6 @@ public class HashTableMap<KeyType, ValueType> implements MapADT {
   }
 
   protected class Pair {
-
     public KeyType key;
     public ValueType value;
 
