@@ -25,9 +25,6 @@
         <configuration>
           <redirectTestOutputToFile>true</redirectTestOutputToFile>
           <reportFormat>plain</reportFormat>
-          <includes>
-            <include>**/*Test*.java</include>
-          </includes>
         </configuration>
       </plugin>
     </plugins>
