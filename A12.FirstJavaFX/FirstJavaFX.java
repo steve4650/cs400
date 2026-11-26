@@ -13,7 +13,9 @@ public class FirstJavaFX extends Application {
 
     Label dijkstra =
         new Label(
-"If debugging is the process of removing software bugs,\nthen programming must be the process of putting them in.\n-- Edsger W. Dijkstra");
+            "If debugging is the process of removing software bugs,\n"
+                + "then programming must be the process of putting them in.\n"
+                + "-- Edsger W. Dijkstra");
 
     Circle circle = new Circle(160, 120, 60);
     Polygon polygon = new Polygon(160, 120, 220, 280, 100, 280);
