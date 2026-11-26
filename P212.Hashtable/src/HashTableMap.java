@@ -2,10 +2,11 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-public class HashTableMap<KeyType, ValueType> implements MapADT {
+public class HashTableMap<KeyType, ValueType> implements MapADT<KeyType, ValueType> {
 
   protected LinkedList<Pair>[] table = null;
-  protected int capacity  = 8;
+  protected int capacity = 8;
+  protected int size = 0;
 
   @SuppressWarnings("unchecked")
   public HashTableMap(int capacity) {
@@ -22,8 +23,12 @@ public class HashTableMap<KeyType, ValueType> implements MapADT {
 
   @Override
   public void put(KeyType key, ValueType value) throws IllegalArgumentException {
+    this.size++;
+    if (this.size / this.capacity > 0.75) {
+      rehash();
+    }
     int index = Math.abs(key.hashCode()) % this.capacity;
-    if(table[index] == null) {
+    if (table[index] == null) {
       table[index] = new LinkedList<Pair>();
     }
     table[index].add(new Pair((KeyType) key, (ValueType) value));
@@ -31,26 +36,42 @@ public class HashTableMap<KeyType, ValueType> implements MapADT {
 
   @Override
   public boolean containsKey(KeyType key) {
-    int index = Math.abs(key.hashCode()) % this.capacity;
-    return table[index] != null;
+    try {
+      this.get(key);
+      return true;
+    } catch (NoSuchElementException e) {
+      return false;
+    }
   }
 
   @Override
   public ValueType get(KeyType key) throws NoSuchElementException {
     int index = Math.abs(key.hashCode()) % this.capacity;
-    if(table[index]== null) {
+    if (table[index] == null) {
       throw new NoSuchElementException();
     }
-    for(Pair pair: table[index]) {
-      if(pair.key.equals(key)) {
+    for (Pair pair : table[index]) {
+      if (pair.key.equals(key)) {
         return pair.value;
       }
     }
+    throw new NoSuchElementException();
   }
 
   @Override
   public ValueType remove(KeyType key) throws NoSuchElementException {
-    return null;
+    int index = Math.abs(key.hashCode()) % this.capacity;
+    if (table[index] == null) {
+      throw new NoSuchElementException();
+    }
+    int i = 0;
+    for (Pair pair : table[index]) {
+      if (pair.key.equals(key)) {
+        table[index].remove(i);
+      }
+      i++;
+    }
+    throw new NoSuchElementException();
   }
 
   @SuppressWarnings("unchecked")
@@ -61,7 +82,7 @@ public class HashTableMap<KeyType, ValueType> implements MapADT {
 
   @Override
   public int getSize() {
-    return 0;
+    return this.size;
   }
 
   @Override
@@ -70,8 +91,29 @@ public class HashTableMap<KeyType, ValueType> implements MapADT {
   }
 
   @Override
-  public List getKeys() {
-    return null;
+  public List<KeyType> getKeys() {
+    List<KeyType> result = new LinkedList<KeyType>();
+    for (int i = 0; i < this.table.length; i++) {
+      if (table[i] != null) {
+        for (Pair pair : table[i]) {
+          result.add(pair.key);
+        }
+      }
+    }
+    return result;
+  }
+
+  private void rehash() {
+    this.capacity *= 2;
+    LinkedList<Pair>[] old_table = this.table;
+    this.clear();
+    for (int i = 0; i < old_table.length; i++) {
+      if (old_table[i] != null) {
+        for (Pair pair : old_table[i]) {
+          this.put(pair.key, pair.value);
+        }
+      }
+    }
   }
 
   protected class Pair {
