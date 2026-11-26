@@ -20,7 +20,7 @@ public class FirstJavaFX extends Application {
     Circle circle = new Circle(160, 120, 60);
     Polygon polygon = new Polygon(160, 120, 220, 280, 100, 280);
 
-    Group group = new Group(circle, polygon, label);
+    Group group = new Group(circle, polygon, dijkstra);
     Scene scene = new Scene(group, 480, 320);
     stage.setScene(scene);
     stage.show();
