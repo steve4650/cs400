@@ -11,73 +11,101 @@ public class HashTableMap<KeyType, ValueType> implements MapADT<KeyType, ValueTy
   @SuppressWarnings("unchecked")
   public HashTableMap(int capacity) {
     if (capacity < 1) {
-      throw new IllegalArgumentException("small small capacity i fear...");
+      throw new IllegalArgumentException("Capacity must be at least 1.");
     }
     this.capacity = capacity;
-    this.table = new LinkedList[capacity];
+    this.size = 0;
+    this.table = (LinkedList<Pair>[]) new LinkedList[capacity];
   }
 
   public HashTableMap() {
     this(8);
   }
 
+  /*
+   * Helper method to get the table index of a key
+   * according to the hash formula
+   */
+  int getIndex(KeyType key) {
+    return Math.abs(key.hashCode()) % this.capacity;
+  }
+
   @Override
   public void put(KeyType key, ValueType value) throws IllegalArgumentException {
-    this.size++;
-    if (this.size / this.capacity > 0.75) {
+    if (key == null || this.containsKey(key)) {
+      throw new IllegalArgumentException();
+    }
+
+    if ((double) (this.size + 1) / this.capacity >= 0.75) {
       rehash();
     }
-    int index = Math.abs(key.hashCode()) % this.capacity;
+    int index = getIndex(key);
     if (table[index] == null) {
       table[index] = new LinkedList<Pair>();
     }
-    table[index].add(new Pair((KeyType) key, (ValueType) value));
+    table[index].add(new Pair(key, value));
+    this.size++;
   }
 
   @Override
   public boolean containsKey(KeyType key) {
-    try {
-      this.get(key);
-      return true;
-    } catch (NoSuchElementException e) {
+    if (key == null) {
+      throw new NullPointerException();
+    }
+    int index = getIndex(key);
+    if (table[index] == null) {
       return false;
     }
+    for (Pair pair : table[index]) {
+      if (pair.key.equals(key)) {
+        return true;
+      }
+    }
+    return false;
   }
 
   @Override
   public ValueType get(KeyType key) throws NoSuchElementException {
-    int index = Math.abs(key.hashCode()) % this.capacity;
+    if (key == null) {
+      throw new NullPointerException("Key cannot be null.");
+    }
+    int index = getIndex(key);
     if (table[index] == null) {
-      throw new NoSuchElementException();
+      throw new NoSuchElementException("Key not found.");
     }
     for (Pair pair : table[index]) {
       if (pair.key.equals(key)) {
         return pair.value;
       }
     }
-    throw new NoSuchElementException();
+    throw new NoSuchElementException("Key not found.");
   }
 
   @Override
   public ValueType remove(KeyType key) throws NoSuchElementException {
-    int index = Math.abs(key.hashCode()) % this.capacity;
-    if (table[index] == null) {
-      throw new NoSuchElementException();
+    if (key == null) {
+      throw new NullPointerException();
     }
-    int i = 0;
-    for (Pair pair : table[index]) {
+    int index = getIndex(key);
+    if (table[index] == null) {
+      throw new NoSuchElementException("Key not found.");
+    }
+    for (int i = 0; i < table[index].size(); i++) {
+      Pair pair = table[index].get(i);
       if (pair.key.equals(key)) {
         table[index].remove(i);
+        this.size--;
+        return pair.value;
       }
-      i++;
     }
-    throw new NoSuchElementException();
+    throw new NoSuchElementException("Key not found.");
   }
 
   @SuppressWarnings("unchecked")
   @Override
   public void clear() {
-    this.table = new LinkedList[this.capacity];
+    this.table = (LinkedList<Pair>[]) new LinkedList[this.capacity];
+    this.size = 0;
   }
 
   @Override
@@ -103,19 +131,26 @@ public class HashTableMap<KeyType, ValueType> implements MapADT<KeyType, ValueTy
     return result;
   }
 
-  private void rehash() {
+  /** Helper method to double the capacity and rehash all key-value pairs. */
+  @SuppressWarnings("unchecked")
+  void rehash() {
     this.capacity *= 2;
-    LinkedList<Pair>[] old_table = this.table;
-    this.clear();
-    for (int i = 0; i < old_table.length; i++) {
-      if (old_table[i] != null) {
-        for (Pair pair : old_table[i]) {
-          this.put(pair.key, pair.value);
+    LinkedList<Pair>[] oldTable = this.table;
+    this.table = (LinkedList<Pair>[]) new LinkedList[this.capacity];
+    for (int i = 0; i < oldTable.length; i++) {
+      if (oldTable[i] != null) {
+        for (Pair pair : oldTable[i]) {
+          int index = getIndex(pair.key);
+          if (this.table[index] == null) {
+            this.table[index] = new LinkedList<Pair>();
+          }
+          this.table[index].add(pair);
         }
       }
     }
   }
 
+  /** Inner class to represent key-value pairs stored in the hash table. */
   protected class Pair {
     public KeyType key;
     public ValueType value;
