@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+
+if [ ! -d "test" ]; then
+	echo
+	echo "Submission Failed Check: submission does not contain folder test/"
+	exit 1
+fi
+
+if [ ! -f "test/P212SubmissionChecker.java" ]; then
+	echo
+	echo "Submission Failed Check: could not find P212SubmissionChecker"
+	exit 1
+fi
+
+if ! mvn -Dtest=P212SubmissionChecker test; then
+	echo
+	echo "Submission Failed Check: one or more JUnit tests failed; if you have submitted your HashTableMap.java with its methods left empty, then your submission is complete for the mid-week deadline"
+	exit 1
+fi
+
+echo
+echo "Submission Passed Basic Scan"
+exit 0

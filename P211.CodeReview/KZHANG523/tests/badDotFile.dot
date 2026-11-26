@@ -1,0 +1,10 @@
+digraph campus {
+  "Eagle Heights Community Center" -> "Brown Shelter" [seconds=272..79];
+  "Eagle Heights Community Center" -> "Research Plots" [seconds=465.29];
+  "Eagle Heights Community Center"badinput -> "Wally Bauman Woods" [seconds=480.16];
+  "Eagle Heights Community Center" -> "Well #19" [seconds=480.73];
+  "Eagle Heights Community Center" -> "Parking Lot 131" [seconds=561.65];
+  "Brown Shelter" -> "Eagle Heights Community Center" [seconds=272.79];
+  "Brown Shelter" -> "Wally Bauman Woods" [seconds=381.9];
+  "Brown Shelter" -> "Apartment Services Office" [seconds=460.44];
+}
