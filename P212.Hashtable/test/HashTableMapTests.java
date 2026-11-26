@@ -1,16 +1,12 @@
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
 import java.util.List;
 import java.util.NoSuchElementException;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
-/**
- * JUnit 5 test suite for HashTableMap.
- */
+/** JUnit 5 test suite for HashTableMap. */
 public class HashTableMapTests {
 
-  /**
-   * Test 1: inserting and retrieving key-value pairs.
-   */
+  /** Test 1: inserting and retrieving key-value pairs. */
   @Test
   public void test1() {
     HashTableMap<String, Integer> map = new HashTableMap<>();
@@ -25,9 +21,7 @@ public class HashTableMapTests {
     Assertions.assertThrows(NoSuchElementException.class, () -> map.get("pear"));
   }
 
-  /**
-   * Test 2: removing key-value pairs.
-   */
+  /** Test 2: removing key-value pairs. */
   @Test
   public void test2() {
     HashTableMap<String, Integer> map = new HashTableMap<>();
@@ -40,9 +34,7 @@ public class HashTableMapTests {
     Assertions.assertEquals(2, map.get("banana"));
   }
 
-  /**
-   * Test 3: clearing.
-   */
+  /** Test 3: clearing. */
   @Test
   public void test3() {
     HashTableMap<String, Integer> map = new HashTableMap<>();
@@ -59,9 +51,7 @@ public class HashTableMapTests {
     Assertions.assertThrows(NoSuchElementException.class, () -> map.get("pear"));
   }
 
-  /**
-   * Test 4: Tests collision handling: 0 and 8 should not clobber each other.
-   */
+  /** Test 4: Tests collision handling: 0 and 8 should not clobber each other. */
   @Test
   public void test4() {
     HashTableMap<Integer, String> map = new HashTableMap<>(8);
@@ -75,9 +65,7 @@ public class HashTableMapTests {
     Assertions.assertTrue(keys.contains(8));
   }
 
-  /**
-   * Test 5: Tests that the table resizes at 75% load factor and rehashes correctly.
-   */
+  /** Test 5: Tests that the table resizes at 75% load factor and rehashes correctly. */
   @Test
   public void test5() {
     HashTableMap<String, Integer> map = new HashTableMap<>(8);
